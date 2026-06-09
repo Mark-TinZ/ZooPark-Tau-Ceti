@@ -1,0 +1,133 @@
+[gd_scene format=3 uid="uid://xnf763p234ai"]
+
+[ext_resource type="Script" uid="uid://e6ojy26lbl57" path="res://scenes/settings_menu/settings_menu.gd" id="1_j78aw"]
+
+[node name="SettingsMenu" type="Control" unique_id=675124731]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j78aw")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1464787809]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1018744209]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1457064642]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1353547569]
+layout_mode = 2
+
+[node name="TabContainer" type="TabContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=949231939]
+layout_mode = 2
+current_tab = 1
+
+[node name="Game" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer" unique_id=1747118944]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game" unique_id=895322279]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/VBoxContainer" unique_id=225442383]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/VBoxContainer/HBoxContainer" unique_id=2147295770]
+layout_mode = 2
+text = "KEY_LANGUAGE"
+
+[node name="LanguageButton" type="OptionButton" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/VBoxContainer/HBoxContainer" unique_id=131013823]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/VBoxContainer" unique_id=835688298]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/VBoxContainer/HBoxContainer2" unique_id=1731117796]
+layout_mode = 2
+text = "KEY_UI_SCALE"
+
+[node name="ScaleButton" type="OptionButton" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/VBoxContainer/HBoxContainer2" unique_id=639562113]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/VBoxContainer" unique_id=1275785595]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/VBoxContainer/HBoxContainer3" unique_id=1868089052]
+layout_mode = 2
+text = "KEY_SUBTITLES"
+
+[node name="SubtitlesCheck" type="CheckBox" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/VBoxContainer/HBoxContainer3" unique_id=23003202]
+layout_mode = 2
+
+[node name="Audio" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer" unique_id=619710398]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio" unique_id=1336510856]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer" unique_id=2015122479]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer/HBoxContainer" unique_id=1089295286]
+layout_mode = 2
+
+[node name="MasterSlider" type="HSlider" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer/HBoxContainer" unique_id=1380487748]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer" unique_id=1705326147]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer/HBoxContainer2" unique_id=1414028942]
+layout_mode = 2
+
+[node name="MusicSlider" type="HSlider" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer/HBoxContainer2" unique_id=2103220157]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer" unique_id=789037089]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer/HBoxContainer3" unique_id=1203014748]
+layout_mode = 2
+
+[node name="SfxSlider" type="HSlider" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer/HBoxContainer3" unique_id=1537738206]
+layout_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer" unique_id=1904184559]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer/HBoxContainer4" unique_id=429831412]
+layout_mode = 2
+
+[node name="VoiceSlider" type="HSlider" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer/HBoxContainer4" unique_id=652933968]
+layout_mode = 2
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer" unique_id=563933379]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer/HBoxContainer5" unique_id=1320867840]
+layout_mode = 2
+
+[node name="UISlider" type="HSlider" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/VBoxContainer/HBoxContainer5" unique_id=390900083]
+layout_mode = 2
+
+[node name="Graphics" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/TabContainer" unique_id=1936587789]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=858651244]
+layout_mode = 2

@@ -1,0 +1,12 @@
+keys,ru,en
+KEY_START,Играть,Start
+KEY_SETTINGS,Настройки,Settings
+KEY_EXIT,Выход,Exit
+KEY_EXIT_CONFIRM_TITLE,Выход,Exit
+KEY_EXIT_CONFIRM_TEXT,Вы уверены что хотите выйти?,Are you sure you want to exit?
+KEY_EXIT_NO,Нет,No
+KEY_EXIT_YES,Да,Yes
+KEY_BACK,Назад,Back
+KEY_AUDIO_VOLUME,Громкость звука,Audio Volume
+KEY_GRAPHICS_FULLSCREEN,Полноэкранный режим,Fullscreen
+KEY_LANGUAGE,Язык,Language
