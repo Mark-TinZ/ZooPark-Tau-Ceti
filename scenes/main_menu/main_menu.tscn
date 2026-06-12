@@ -2,14 +2,35 @@
 
 [ext_resource type="Script" uid="uid://cdexobo6rp1vh" path="res://scenes/main_menu/main_menu.gd" id="1_0ebjn"]
 [ext_resource type="AudioStream" uid="uid://xunu5vlm6wjq" path="res://assets/audio/music/Lost in space.wav" id="1_fsom3"]
+[ext_resource type="PackedScene" uid="uid://xnf763p234ai" path="res://scenes/settings_menu/settings_menu.tscn" id="3_ob46e"]
 
-[sub_resource type="GDScript" id="GDScript_sl1te"]
-resource_name = "start_select_button"
-script/source = "extends VBoxContainer
+[sub_resource type="Gradient" id="Gradient_ob46e"]
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
 
-func _ready() -> void:
-	$MainMenuButtonStart.grab_focus()
-"
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_uqeha"]
+gradient = SubResource("Gradient_ob46e")
+
+[sub_resource type="Curve" id="Curve_wem23"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3ovsr"]
+curve = SubResource("Curve_wem23")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ob46e"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(960, 540, 1)
+direction = Vector3(-1, 0, 0)
+spread = 15.0
+initial_velocity_min = 20.0
+initial_velocity_max = 80.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_3ovsr")
+color_ramp = SubResource("GradientTexture1D_uqeha")
+collision_mode = 2
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sl1te"]
 
@@ -51,15 +72,17 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 3.0
-offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_0ebjn")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1515640224]
-stream = ExtResource("1_fsom3")
-autoplay = true
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=1414526879]
+position = Vector2(960, 541)
+amount = 752
+lifetime = 20.0
+preprocess = 15.0
+trail_lifetime = 15.0
+process_material = SubResource("ParticleProcessMaterial_ob46e")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=558332959]
 layout_mode = 1
@@ -76,7 +99,6 @@ theme_override_constants/margin_left = 40
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_constants/separation = 15
-script = SubResource("GDScript_sl1te")
 
 [node name="MainMenuButtonStart" type="Button" parent="MarginContainer/VBoxContainer" unique_id=860474002]
 layout_mode = 2
@@ -114,6 +136,10 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_8ekit")
 theme_override_styles/focus = SubResource("StyleBoxFlat_x2yvf")
 text = "KEY_EXIT"
 
+[node name="SettingsMenu" parent="." unique_id=675124731 instance=ExtResource("3_ob46e")]
+visible = false
+layout_mode = 1
+
 [node name="ExitConfirmationDialog" type="ConfirmationDialog" parent="." unique_id=393782538]
 oversampling_override = 1.0
 title = "KEY_EXIT_CONFIRM_TITLE"
@@ -122,3 +148,8 @@ size = Vector2i(327, 100)
 ok_button_text = "KEY_EXIT_YES"
 dialog_text = "KEY_EXIT_CONFIRM_TEXT"
 cancel_button_text = "KEY_EXIT_NO"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1515640224]
+stream = ExtResource("1_fsom3")
+autoplay = true
+bus = &"Music"

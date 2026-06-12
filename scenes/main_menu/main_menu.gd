@@ -1,5 +1,7 @@
 extends Control
 
+const SETTINGS_MENU_SCENE = preload("res://scenes/settings_menu/settings_menu.tscn")
+
 @onready var button_start: Button = $MarginContainer/VBoxContainer/MainMenuButtonStart
 @onready var button_settings: Button = $MarginContainer/VBoxContainer/MainMenuButtonSettings
 @onready var button_exit: Button = $MarginContainer/VBoxContainer/MainMenuButtonExit
@@ -23,14 +25,12 @@ func _on_start_pressed() -> void:
 
 func _on_settings_pressed() -> void:
 	print("Открытие настроек...")
-	# Пока у нас нет отдельного меню настроек, просто сменим язык для теста God Tier локализации!
-	if SaveManager.settings["language"] == "ru":
-		SaveManager.settings["language"] = "en"
-	else:
-		SaveManager.settings["language"] = "ru"
+	var settings_menu = SETTINGS_MENU_SCENE.instantiate()
+	add_child(settings_menu)
 	
-	SaveManager.apply_settings()
-	SaveManager.save_settings()
+	# Когда меню настроек закроется (удалится из дерева сцен),
+	# возвращаем фокус обратно на кнопку "Настройки"
+	settings_menu.tree_exited.connect(func(): button_settings.grab_focus())
 
 func _on_exit_pressed() -> void:
 	# Вместо резкого выхода показываем наше красивое диалоговое окно

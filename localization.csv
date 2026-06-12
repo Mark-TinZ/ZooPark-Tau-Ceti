@@ -10,3 +10,22 @@ KEY_BACK,Назад,Back
 KEY_AUDIO_VOLUME,Громкость звука,Audio Volume
 KEY_GRAPHICS_FULLSCREEN,Полноэкранный режим,Fullscreen
 KEY_LANGUAGE,Язык,Language
+KEY_SETTINGS_TITLE,НАСТРОЙКИ,SETTINGS
+KEY_WINDOWED,В окне,Windowed
+KEY_FULLSCREEN,На весь экран,Fullscreen
+KEY_UI_SCALE,Масштаб интерфейса,UI Scale
+KEY_SUBTITLES,Субтитры,Subtitles
+KEY_AUDIO_MASTER,Общая громкость,Master Volume
+KEY_AUDIO_MUSIC,Музыка,Music
+KEY_AUDIO_SFX,Звуковые эффекты,SFX
+KEY_AUDIO_VOICE,Голос,Voice
+KEY_AUDIO_UI,Интерфейс,UI
+KEY_GRAPHICS_RESOLUTION,Разрешение,Resolution
+KEY_GRAPHICS_DISPLAYMODE,Режим экрана,Display Mode
+KEY_GRAPHICS_BLOOM,Свечение,Bloom
+KEY_GRAPHICS_BRIGHTNESS,Яркость,Brightness
+Game,Игра,Game
+Audio,Звук,Audio
+Graphics,Графика,Graphics
+KEY_SETTINGS_EXIT,Закрыть настройки,Close Settings
+SETTINGS_LABEL,Настройки,Settings
