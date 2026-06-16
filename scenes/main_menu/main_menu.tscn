@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cdexobo6rp1vh" path="res://scenes/main_menu/main_menu.gd" id="1_0ebjn"]
 [ext_resource type="AudioStream" uid="uid://xunu5vlm6wjq" path="res://assets/audio/music/Lost in space.wav" id="1_fsom3"]
-[ext_resource type="PackedScene" uid="uid://xnf763p234ai" path="res://scenes/settings_menu/settings_menu.tscn" id="3_ob46e"]
+[ext_resource type="Script" path="res://scenes/main_menu/world_creation_menu.gd" id="2_world"]
+[ext_resource type="Script" path="res://scenes/main_menu/lan_browser.gd" id="3_lan"]
 
 [sub_resource type="Gradient" id="Gradient_ob46e"]
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
@@ -136,9 +137,48 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_8ekit")
 theme_override_styles/focus = SubResource("StyleBoxFlat_x2yvf")
 text = "KEY_EXIT"
 
-[node name="SettingsMenu" parent="." unique_id=675124731 instance=ExtResource("3_ob46e")]
+
+[node name="PlayPanel" type="Control" parent="." unique_id=987654321]
 visible = false
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="PlayPanel" unique_id=987654322]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="PlayPanel/CenterContainer" unique_id=987654323]
+custom_minimum_size = Vector2(800, 600)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayPanel/CenterContainer/PanelContainer" unique_id=987654324]
+layout_mode = 2
+
+[node name="TabContainer" type="TabContainer" parent="PlayPanel/CenterContainer/PanelContainer/VBoxContainer" unique_id=987654325]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Singleplayer" type="MarginContainer" parent="PlayPanel/CenterContainer/PanelContainer/VBoxContainer/TabContainer" unique_id=987654326]
+layout_mode = 2
+script = ExtResource("2_world")
+
+[node name="Multiplayer" type="MarginContainer" parent="PlayPanel/CenterContainer/PanelContainer/VBoxContainer/TabContainer" unique_id=987654327]
+visible = false
+layout_mode = 2
+script = ExtResource("3_lan")
+
+[node name="BackButton" type="Button" parent="PlayPanel/CenterContainer/PanelContainer/VBoxContainer" unique_id=987654328]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "KEY_BACK"
 
 [node name="ExitConfirmationDialog" type="ConfirmationDialog" parent="." unique_id=393782538]
 oversampling_override = 1.0

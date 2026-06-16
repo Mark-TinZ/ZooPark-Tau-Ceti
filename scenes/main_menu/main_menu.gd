@@ -7,6 +7,10 @@ const SETTINGS_MENU_SCENE = preload("res://scenes/settings_menu/settings_menu.ts
 @onready var button_exit: Button = $MarginContainer/VBoxContainer/MainMenuButtonExit
 @onready var exit_confirmation: ConfirmationDialog = $ExitConfirmationDialog
 
+@onready var main_buttons: MarginContainer = $MarginContainer
+@onready var play_panel: Control = $PlayPanel
+@onready var button_back: Button = $PlayPanel/CenterContainer/PanelContainer/VBoxContainer/BackButton
+
 func _ready() -> void:
 	# Даем фокус первой кнопке при старте
 	button_start.grab_focus()
@@ -15,13 +19,20 @@ func _ready() -> void:
 	button_start.pressed.connect(_on_start_pressed)
 	button_settings.pressed.connect(_on_settings_pressed)
 	button_exit.pressed.connect(_on_exit_pressed)
+	button_back.pressed.connect(_on_back_pressed)
 	
 	# Подключаем сигнал подтверждения выхода
 	exit_confirmation.confirmed.connect(_on_exit_confirmed)
 
 func _on_start_pressed() -> void:
-	print("Запуск игры...")
-	# Здесь будет смена сцены: GetTree().ChangeSceneToFile("res://scenes/game.tscn")
+	main_buttons.hide()
+	play_panel.show()
+	# TODO: grab focus on the first item in PlayPanel
+
+func _on_back_pressed() -> void:
+	play_panel.hide()
+	main_buttons.show()
+	button_start.grab_focus()
 
 func _on_settings_pressed() -> void:
 	print("Открытие настроек...")

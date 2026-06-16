@@ -13,6 +13,7 @@ KEY_LANGUAGE,Язык,Language
 KEY_SETTINGS_TITLE,НАСТРОЙКИ,SETTINGS
 KEY_WINDOWED,В окне,Windowed
 KEY_FULLSCREEN,На весь экран,Fullscreen
+KEY_BORDERLESS,Оконный без рамки,Borderless Windowed
 KEY_UI_SCALE,Масштаб интерфейса,UI Scale
 KEY_SUBTITLES,Субтитры,Subtitles
 KEY_AUDIO_MASTER,Общая громкость,Master Volume
@@ -24,6 +25,24 @@ KEY_GRAPHICS_RESOLUTION,Разрешение,Resolution
 KEY_GRAPHICS_DISPLAYMODE,Режим экрана,Display Mode
 KEY_GRAPHICS_BLOOM,Свечение,Bloom
 KEY_GRAPHICS_BRIGHTNESS,Яркость,Brightness
+KEY_VSYNC,Вертикальная синхронизация,VSync
+KEY_MAX_FPS,Ограничение FPS,Max FPS
+KEY_UNLIMITED,Без ограничений,Unlimited
+KEY_MSAA,Сглаживание MSAA,MSAA
+KEY_FXAA,Быстрое сглаживание (FXAA),Fast Anti-Aliasing (FXAA)
+KEY_TAA,Временное сглаживание (TAA),Temporal Anti-Aliasing (TAA)
+KEY_SHADOW_QUALITY,Качество теней,Shadow Quality
+KEY_SSAO,Фоновое затенение (SSAO),Ambient Occlusion (SSAO)
+KEY_SSR,Отражения (SSR),Screen Space Reflections (SSR)
+KEY_OFF,Выкл,Off
+KEY_LOW,Низкое,Low
+KEY_MEDIUM,Среднее,Medium
+KEY_HIGH,Высокое,High
+KEY_ULTRA,Ультра,Ultra
+KEY_ON,Вкл,On
+KEY_ADAPTIVE,Адаптивный,Adaptive
+KEY_AA_SECTION,— Сглаживание —,— Anti-Aliasing —
+KEY_QUALITY_SECTION,— Качество графики —,— Graphics Quality —
 Game,Игра,Game
 Audio,Звук,Audio
 Graphics,Графика,Graphics

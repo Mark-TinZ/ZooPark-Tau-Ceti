@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxabsplashscreen123"]
+
+[ext_resource type="Script" path="res://scenes/splash/splash_screen.gd" id="1_splsh"]
+
+[node name="SplashScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_splsh")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0235294, 0.0392157, 0.0784314, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TempleOSText" type="Label" parent="CenterContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "TempleOS KERNEL INITIALIZED... SYSTEM BOOT..."
+horizontal_alignment = 1
+
+[node name="GodotLogo" type="VBoxContainer" parent="CenterContainer"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Label" type="Label" parent="CenterContainer/GodotLogo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 48
+text = "ZooPark: Tau Ceti"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="CenterContainer/GodotLogo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.27451, 0.509804, 0.705882, 1)
+theme_override_font_sizes/font_size = 24
+text = "Powered by Godot Engine"
+horizontal_alignment = 1
