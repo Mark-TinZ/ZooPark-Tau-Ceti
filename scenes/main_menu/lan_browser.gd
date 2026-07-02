@@ -8,29 +8,26 @@ var udp: PacketPeerUDP
 var discovered_servers = {} # IP -> Server Name
 var _poll_timer: float = 0.0
 
-var server_list_container: VBoxContainer
-var ip_input: LineEdit
+@onready var server_list_container: VBoxContainer = %ServerListContainer
+@onready var refresh_status_lbl: Label = %RefreshStatusLabel
+@onready var ip_input: LineEdit = %IpInput
+@onready var connect_btn: Button = %ConnectBtn
+@onready var add_server_btn: Button = %AddServerBtn
+@onready var host_btn: Button = %HostBtn
 
 func _ready() -> void:
-	# Даем отступы
-	add_theme_constant_override("margin_left", 20)
-	add_theme_constant_override("margin_right", 20)
-	add_theme_constant_override("margin_top", 20)
-	add_theme_constant_override("margin_bottom", 20)
+	connect_btn.pressed.connect(_on_direct_connect_pressed)
+	host_btn.pressed.connect(_on_host_pressed)
+	# add_server_btn.pressed.connect(_on_add_server) # TODO
 	
-	var main_vbox = VBoxContainer.new()
-	main_vbox.add_theme_constant_override("separation", 20)
-	add_child(main_vbox)
-	
-	_build_ui(main_vbox)
 	_setup_udp()
-	
 	set_process(true)
+	
+	_refresh_server_list()
 
 func _setup_udp() -> void:
 	udp = PacketPeerUDP.new()
 	udp.set_broadcast_enabled(true)
-	# Привязываем на прослушивание входящих броадкастов
 	var err = udp.bind(LISTEN_PORT)
 	if err != OK:
 		push_error("LAN Browser: Ошибка привязки UDP порта " + str(LISTEN_PORT))
@@ -41,7 +38,6 @@ func _exit_tree() -> void:
 
 func _process(delta: float) -> void:
 	_poll_timer += delta
-	# Опрашиваем сокет и пингуем раз в 1.5 секунды, чтобы не грузить поток
 	if _poll_timer >= 1.5:
 		_poll_timer = 0.0
 		_broadcast_ping()
@@ -50,85 +46,35 @@ func _process(delta: float) -> void:
 func _broadcast_ping() -> void:
 	if udp:
 		var msg = "ZOOPARK_PING"
-		# Броадкаст на 255.255.255.255
 		udp.set_dest_address("255.255.255.255", BROADCAST_PORT)
 		udp.put_packet(msg.to_utf8_buffer())
 
 func _poll_udp_packets() -> void:
 	if not udp: return
 	
-	# Неблокирующий опрос
 	while udp.get_available_packet_count() > 0:
 		var packet = udp.get_packet()
 		var sender_ip = udp.get_packet_ip()
 		var msg = packet.get_string_from_utf8()
 		
-		# Если получаем ответ PONG от сервера
 		if msg.begins_with("ZOOPARK_PONG:"):
 			var server_name = msg.replace("ZOOPARK_PONG:", "")
 			if not discovered_servers.has(sender_ip):
 				discovered_servers[sender_ip] = server_name
 				_refresh_server_list()
 
-func _build_ui(parent: Control) -> void:
-	# Список серверов
-	var scroll = ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(0, 300)
-	server_list_container = VBoxContainer.new()
-	server_list_container.add_theme_constant_override("separation", 10)
-	scroll.add_child(server_list_container)
-	
-	# Ручное подключение
-	var direct_connect_hbox = HBoxContainer.new()
-	var ip_label = Label.new()
-	ip_label.text = "IP Адрес:"
-	ip_input = LineEdit.new()
-	ip_input.placeholder_text = "127.0.0.1"
-	ip_input.custom_minimum_size = Vector2(200, 0)
-	var connect_btn = Button.new()
-	connect_btn.text = "Быстрое подключение"
-	connect_btn.pressed.connect(_on_direct_connect_pressed)
-	
-	direct_connect_hbox.add_child(ip_label)
-	direct_connect_hbox.add_child(ip_input)
-	direct_connect_hbox.add_child(connect_btn)
-	
-	# Кнопки управления
-	var bottom_hbox = HBoxContainer.new()
-	bottom_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	bottom_hbox.add_theme_constant_override("separation", 20)
-	
-	var add_server_btn = Button.new()
-	add_server_btn.text = "Добавить в избранное"
-	# add_server_btn.pressed.connect(_on_add_server) # TODO
-	
-	var host_btn = Button.new()
-	host_btn.text = "Создать сервер (Host)"
-	host_btn.pressed.connect(_on_host_pressed)
-	
-	bottom_hbox.add_child(add_server_btn)
-	bottom_hbox.add_child(host_btn)
-	
-	parent.add_child(Label.new()) # отступ
-	parent.add_child(scroll)
-	parent.add_child(HSeparator.new())
-	parent.add_child(direct_connect_hbox)
-	parent.add_child(HSeparator.new())
-	parent.add_child(bottom_hbox)
-	
-	_refresh_server_list()
-
 func _refresh_server_list() -> void:
+	# Удаляем старые серверы
 	for c in server_list_container.get_children():
-		c.queue_free()
+		if c != refresh_status_lbl:
+			c.queue_free()
 		
 	if discovered_servers.is_empty():
-		var lbl = Label.new()
-		lbl.text = "Идёт поиск серверов в локальной сети..."
-		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		server_list_container.add_child(lbl)
+		refresh_status_lbl.show()
 		return
 		
+	refresh_status_lbl.hide()
+	
 	for ip in discovered_servers.keys():
 		var hbox = HBoxContainer.new()
 		var lbl = Label.new()
@@ -136,7 +82,7 @@ func _refresh_server_list() -> void:
 		lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		
 		var btn = Button.new()
-		btn.text = "Подключиться"
+		btn.text = "KEY_CONNECT"
 		btn.pressed.connect(func(): _join_game(ip))
 		
 		hbox.add_child(lbl)
@@ -150,13 +96,11 @@ func _on_direct_connect_pressed() -> void:
 	_join_game(target_ip)
 
 func _on_host_pressed() -> void:
-	# Пример создания сервера ENet
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_server(HOST_PORT, 8)
 	if error == OK:
 		multiplayer.multiplayer_peer = peer
 		print("Сервер успешно создан на порту ", HOST_PORT)
-		# В реальной игре нужно запустить сцену с игрой
 		SceneManager.load_scene_async("res://scenes/game/game.tscn")
 	else:
 		push_error("Не удалось создать сервер. Ошибка: " + str(error))

@@ -1,0 +1,147 @@
+[gd_scene format=3 uid="uid://cxab3xqw45ty"]
+
+[ext_resource type="Script" path="res://scenes/main_menu/world_creation_menu.gd" id="1_world_creation"]
+
+[node name="Singleplayer" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("1_world_creation")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="SavesContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SavesScroll" type="ScrollContainer" parent="VBoxContainer/SavesContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SavesListContainer" type="VBoxContainer" parent="VBoxContainer/SavesContainer/SavesScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="CreateButton" type="Button" parent="VBoxContainer/SavesContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+custom_minimum_size = Vector2(250, 40)
+text = "KEY_CREATE_WORLD"
+
+[node name="CreationPanel" type="VBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Title" type="Label" parent="VBoxContainer/CreationPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.831373, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "KEY_NEW_EXPEDITION"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/CreationPanel"]
+layout_mode = 2
+
+[node name="ModeHBox" type="HBoxContainer" parent="VBoxContainer/CreationPanel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="VBoxContainer/CreationPanel/ModeHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_GAME_MODE"
+
+[node name="ModeOption" type="OptionButton" parent="VBoxContainer/CreationPanel/ModeHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+item_count = 2
+popup/item_0/text = "KEY_MODE_STORY"
+popup/item_0/id = 0
+popup/item_1/text = "KEY_MODE_SANDBOX"
+popup/item_1/id = 1
+
+[node name="CapitalHBox" type="HBoxContainer" parent="VBoxContainer/CreationPanel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="VBoxContainer/CreationPanel/CapitalHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_STARTING_CAPITAL"
+
+[node name="CapitalSlider" type="HSlider" parent="VBoxContainer/CreationPanel/CapitalHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 24)
+layout_mode = 2
+max_value = 100000.0
+step = 1000.0
+value = 50000.0
+
+[node name="CapitalVal" type="Label" parent="VBoxContainer/CreationPanel/CapitalHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.831373, 1, 1)
+text = "50000 ¤"
+horizontal_alignment = 2
+
+[node name="SeedHBox" type="HBoxContainer" parent="VBoxContainer/CreationPanel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="VBoxContainer/CreationPanel/SeedHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_WORLD_SEED"
+
+[node name="SeedInput" type="LineEdit" parent="VBoxContainer/CreationPanel/SeedHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+placeholder_text = "KEY_SEED_PLACEHOLDER"
+
+[node name="RandomSeedButton" type="Button" parent="VBoxContainer/CreationPanel/SeedHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "🎲"
+tooltip_text = "KEY_RANDOM_SEED"
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/CreationPanel"]
+layout_mode = 2
+
+[node name="ButtonHBox" type="HBoxContainer" parent="VBoxContainer/CreationPanel"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 20
+
+[node name="BackButton" type="Button" parent="VBoxContainer/CreationPanel/ButtonHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+text = "KEY_CANCEL"
+
+[node name="StartButton" type="Button" parent="VBoxContainer/CreationPanel/ButtonHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+text = "KEY_START"

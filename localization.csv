@@ -48,3 +48,31 @@ Audio,Звук,Audio
 Graphics,Графика,Graphics
 KEY_SETTINGS_EXIT,Закрыть настройки,Close Settings
 SETTINGS_LABEL,Настройки,Settings
+KEY_CREATE_WORLD,Создать новый мир,Create New World
+KEY_NEW_EXPEDITION,Новая Экспедиция,New Expedition
+KEY_GAME_MODE,Режим:,Game Mode:
+KEY_MODE_STORY,Сюжетная линия (Сектор 1),Storyline (Sector 1)
+KEY_MODE_SANDBOX,Свободная игра (Песочница),Sandbox (Free Play)
+KEY_STARTING_CAPITAL,Стартовый капитал:,Starting Capital:
+KEY_CANCEL,Отмена,Cancel
+KEY_NO_SAVES_FOUND,Нет сохраненных экспедиций.,No saved expeditions found.
+KEY_SEARCHING_SERVERS,Идёт поиск серверов в локальной сети...,Searching for servers on the local network...
+KEY_IP_ADDRESS,IP Адрес:,IP Address:
+KEY_DIRECT_CONNECT,Быстрое подключение,Direct Connect
+KEY_ADD_FAVORITE,Добавить в избранное,Add to Favorites
+KEY_CREATE_SERVER,Создать сервер (Host),Create Server (Host)
+KEY_CONNECT,Подключиться,Connect
+KEY_WORLD_SEED,Сид мира:,World Seed:
+KEY_SEED_PLACEHOLDER,Введите сид или оставьте пустым,Enter seed or leave empty
+KEY_RANDOM_SEED,Случайный сид,Random Seed
+KEY_PAUSE_TITLE,ПАУЗА,PAUSED
+KEY_RESUME,Продолжить,Resume
+KEY_MAIN_MENU,Главное меню,Main Menu
+KEY_SAVING,Сохранение...,Saving...
+KEY_LOAD,Загрузить,Load
+KEY_DELETE,Удалить,Delete
+KEY_SNAPSHOT_TAKEN,Снимок сохранён,Snapshot saved
+KEY_DEBUG_RENDER,═ РЕНДЕР ═,═ RENDER ═
+KEY_DEBUG_MEMORY,═ ПАМЯТЬ ═,═ MEMORY ═
+KEY_DEBUG_WORLD,═ МИР ═,═ WORLD ═
+KEY_DEBUG_HINT,F3 — Дебаг | F4 — Снимок,F3 — Debug | F4 — Snapshot

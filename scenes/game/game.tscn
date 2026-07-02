@@ -1,0 +1,55 @@
+[gd_scene load_steps=9 format=3 uid="uid://game_scene_uid_1"]
+
+[ext_resource type="Script" path="res://scenes/game/world/world_generator.gd" id="1_wg"]
+[ext_resource type="Script" path="res://scenes/game/game.gd" id="1_game"]
+[ext_resource type="Script" path="res://scripts/game/rts_camera.gd" id="2_cam"]
+[ext_resource type="Script" path="res://scripts/game/placement_system.gd" id="3_plac"]
+[ext_resource type="PackedScene" path="res://scenes/game/debug_ui.tscn" id="4_debug"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="5_pause"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+
+[sub_resource type="Sky" id="Sky_env"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 2
+sky = SubResource("Sky_env")
+ambient_light_source = 3
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_game")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_main")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 0, 50, 0)
+shadow_enabled = true
+
+[node name="RTSCameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+script = ExtResource("2_cam")
+move_speed = 30.0
+
+[node name="CameraYaw" type="Node3D" parent="RTSCameraPivot"]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="RTSCameraPivot/CameraYaw"]
+transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 0, 0)
+collision_mask = 2
+spring_length = 20.0
+margin = 0.5
+
+[node name="Camera3D" type="Camera3D" parent="RTSCameraPivot/CameraYaw/SpringArm3D"]
+
+[node name="WorldGenerator" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
+script = ExtResource("1_wg")
+camera = NodePath("../RTSCameraPivot")
+
+[node name="PlacementSystem" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
+script = ExtResource("3_plac")
+camera = NodePath("../RTSCameraPivot/CameraYaw/SpringArm3D/Camera3D")
+
+[node name="DebugUI" parent="." instance=ExtResource("4_debug")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("5_pause")]

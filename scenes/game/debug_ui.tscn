@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://c8fydrbxr2ho6"]
+
+[ext_resource type="Script" uid="uid://tke51lwm4rmw" path="res://scripts/game/debug_ui.gd" id="1_dbg"]
+
+[node name="DebugUI" type="CanvasLayer" unique_id=1415049240]
+process_mode = 4
+layer = 100
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1477932636]
+self_modulate = Color(1, 1, 1, 0.85)
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 340.0
+offset_bottom = 400.0
+script = ExtResource("1_dbg")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1249291751]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1805413269]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1463001899]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.831373, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "DEBUG"
+horizontal_alignment = 1
+
+[node name="HSeparator1" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=272377139]
+layout_mode = 2
+
+[node name="RenderSectionLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1063726617]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.831373, 1, 0.7)
+theme_override_font_sizes/font_size = 12
+text = "KEY_DEBUG_RENDER"
+
+[node name="FPSLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=584147913]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "FPS: --"
+
+[node name="DrawCallsLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=716699820]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Draw Calls: --"
+
+[node name="PolygonsLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1294720476]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Полигоны: --"
+
+[node name="ObjectsLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=679575480]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Объекты: --"
+
+[node name="HSeparator2" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1820946111]
+layout_mode = 2
+
+[node name="MemorySectionLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1726840899]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.831373, 1, 0.7)
+theme_override_font_sizes/font_size = 12
+text = "KEY_DEBUG_MEMORY"
+
+[node name="MemoryLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1327444485]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "RAM: -- MB"
+
+[node name="HSeparator3" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1156772278]
+layout_mode = 2
+
+[node name="WorldSectionLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=473297310]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.831373, 1, 0.7)
+theme_override_font_sizes/font_size = 12
+text = "KEY_DEBUG_WORLD"
+
+[node name="CameraPosLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=492114256]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Камера: --"
+
+[node name="ChunkLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=650902657]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Чанк: --"
+
+[node name="SeedLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=351092304]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Сид: --"
+
+[node name="ChunkGenLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1947197527]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Генерация: -- ms"
+
+[node name="HSeparator4" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=2083250313]
+layout_mode = 2
+
+[node name="HintLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=2109250992]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.5, 0.63, 1)
+theme_override_font_sizes/font_size = 11
+text = "KEY_DEBUG_HINT"
+horizontal_alignment = 1

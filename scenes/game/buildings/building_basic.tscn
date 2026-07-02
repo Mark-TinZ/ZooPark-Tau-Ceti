@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://building_basic_1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_building"]
+albedo_color = Color(0.6, 0.6, 0.6, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_building"]
+material = SubResource("StandardMaterial3D_building")
+size = Vector3(2, 2, 2)
+
+[node name="BuildingBasic" type="MeshInstance3D"]
+mesh = SubResource("BoxMesh_building")

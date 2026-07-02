@@ -21,27 +21,29 @@ buses/default_bus_layout="uid://bcmcw2c2ppx3l"
 
 [autoload]
 
-
-
 SceneManager="*res://scripts/scene_manager.gd"
-
-
-
-
 SaveManager="*uid://cljigkglxpytq"
 ThemeManager="*res://scripts/theme_manager.gd"
+GameSaveSystem="*res://scripts/game_save_system.gd"
+PerformanceMonitor="*res://scripts/utils/performance_monitor.gd"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/resizable=true
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
 [internationalization]
 
 locale/translations=PackedStringArray("res://localization.ru.translation", "res://localization.en.translation")
+
+[layer_names]
+
+3d_physics/layer_1="Default"
+3d_physics/layer_2="Terrain"
+3d_physics/layer_3="Buildings"
+3d_physics/layer_4="Camera"
 
 [physics]
 

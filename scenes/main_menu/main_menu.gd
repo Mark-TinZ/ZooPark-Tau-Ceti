@@ -25,13 +25,11 @@ func _ready() -> void:
 	exit_confirmation.confirmed.connect(_on_exit_confirmed)
 
 func _on_start_pressed() -> void:
-	main_buttons.hide()
 	play_panel.show()
 	# TODO: grab focus on the first item in PlayPanel
 
 func _on_back_pressed() -> void:
 	play_panel.hide()
-	main_buttons.show()
 	button_start.grab_focus()
 
 func _on_settings_pressed() -> void:

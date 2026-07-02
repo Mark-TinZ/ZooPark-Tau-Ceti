@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cdexobo6rp1vh" path="res://scenes/main_menu/main_menu.gd" id="1_0ebjn"]
 [ext_resource type="AudioStream" uid="uid://xunu5vlm6wjq" path="res://assets/audio/music/Lost in space.wav" id="1_fsom3"]
-[ext_resource type="Script" path="res://scenes/main_menu/world_creation_menu.gd" id="2_world"]
-[ext_resource type="Script" path="res://scenes/main_menu/lan_browser.gd" id="3_lan"]
+[ext_resource type="PackedScene" path="res://scenes/main_menu/world_creation_menu.tscn" id="2_world"]
+[ext_resource type="PackedScene" path="res://scenes/main_menu/lan_browser.tscn" id="3_lan"]
 
 [sub_resource type="Gradient" id="Gradient_ob46e"]
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
@@ -158,6 +158,7 @@ grow_vertical = 2
 [node name="PanelContainer" type="PanelContainer" parent="PlayPanel/CenterContainer" unique_id=987654323]
 custom_minimum_size = Vector2(800, 600)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PlayPanel/CenterContainer/PanelContainer" unique_id=987654324]
 layout_mode = 2
@@ -166,14 +167,12 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Singleplayer" type="MarginContainer" parent="PlayPanel/CenterContainer/PanelContainer/VBoxContainer/TabContainer" unique_id=987654326]
+[node name="Singleplayer" parent="PlayPanel/CenterContainer/PanelContainer/VBoxContainer/TabContainer" instance=ExtResource("2_world")]
 layout_mode = 2
-script = ExtResource("2_world")
 
-[node name="Multiplayer" type="MarginContainer" parent="PlayPanel/CenterContainer/PanelContainer/VBoxContainer/TabContainer" unique_id=987654327]
+[node name="Multiplayer" parent="PlayPanel/CenterContainer/PanelContainer/VBoxContainer/TabContainer" instance=ExtResource("3_lan")]
 visible = false
 layout_mode = 2
-script = ExtResource("3_lan")
 
 [node name="BackButton" type="Button" parent="PlayPanel/CenterContainer/PanelContainer/VBoxContainer" unique_id=987654328]
 layout_mode = 2
