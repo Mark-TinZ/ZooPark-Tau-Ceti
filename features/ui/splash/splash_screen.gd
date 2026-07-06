@@ -63,7 +63,7 @@ func _skip() -> void:
 	if _is_skipping:
 		return
 	_is_skipping = true
-	SceneManager.goto_scene("res://scenes/main_menu/main_menu.tscn")
+	SceneManager.goto_scene("res://features/ui/main_menu/main_menu.tscn")
 
 func _setup_audio() -> void:
 	# Бип BIOS
@@ -176,4 +176,4 @@ func _play_sequence() -> void:
 	if _is_skipping: return
 	
 	# Переход к главному меню
-	SceneManager.goto_scene("res://scenes/main_menu/main_menu.tscn")
+	SceneManager.goto_scene("res://features/ui/main_menu/main_menu.tscn")

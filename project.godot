@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="ZooPark"
-run/main_scene="res://scenes/splash/splash_screen.tscn"
+run/main_scene="res://features/ui/splash/splash_screen.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -21,11 +21,11 @@ buses/default_bus_layout="uid://bcmcw2c2ppx3l"
 
 [autoload]
 
-SceneManager="*res://scripts/scene_manager.gd"
+SceneManager="*res://core/scene_manager.gd"
 SaveManager="*uid://cljigkglxpytq"
-ThemeManager="*res://scripts/theme_manager.gd"
-GameSaveSystem="*res://scripts/game_save_system.gd"
-PerformanceMonitor="*res://scripts/utils/performance_monitor.gd"
+ThemeManager="*res://core/theme_manager.gd"
+GameSaveSystem="*res://core/game_save_system.gd"
+PerformanceMonitor="*res://core/performance_monitor.gd"
 
 [display]
 

@@ -63,7 +63,7 @@ func _on_settings() -> void:
 	if _settings_instance and is_instance_valid(_settings_instance):
 		return  # Настройки уже открыты
 	
-	var settings_scene = load("res://scenes/settings_menu/settings_menu.tscn")
+	var settings_scene = load("res://features/ui/settings_menu/settings_menu.tscn")
 	if settings_scene:
 		_settings_instance = settings_scene.instantiate()
 		_settings_instance.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -105,4 +105,4 @@ func _exit_to_menu() -> void:
 	PerformanceMonitor.stop_session()
 	
 	get_tree().paused = false
-	SceneManager.goto_scene("res://scenes/main_menu/main_menu.tscn")
+	SceneManager.goto_scene("res://features/ui/main_menu/main_menu.tscn")

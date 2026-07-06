@@ -40,7 +40,7 @@ func _ready() -> void:
 	terrain_material.albedo_color = Color(0.2, 0.4, 0.2) # Темно-зеленый цвет
 	
 	if not chunk_scene:
-		chunk_scene = load("res://scenes/game/world/chunk.tscn")
+		chunk_scene = load("res://features/world/chunk.tscn")
 		
 	# Запуск профилирования и автосохранения
 	PerformanceMonitor.start_session()

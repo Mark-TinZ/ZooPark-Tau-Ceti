@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://785d8u4jw5sf"]
 
-[ext_resource type="Script" path="res://scenes/main_menu/lan_browser.gd" id="1_lan_browser"]
+[ext_resource type="Script" path="res://features/ui/main_menu/lan_browser.gd" id="1_lan_browser"]
 
 [node name="Multiplayer" type="MarginContainer"]
 anchors_preset = 15

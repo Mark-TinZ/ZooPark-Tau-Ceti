@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d35620g4x6sbq"]
 
-[ext_resource type="Script" uid="uid://fshl21241o53" path="res://scenes/splash/splash_screen.gd" id="1_splsh"]
-[ext_resource type="Shader" uid="uid://bk5fgmy57stbb" path="res://scenes/splash/crt_monitor.gdshader" id="2_crt"]
+[ext_resource type="Script" uid="uid://fshl21241o53" path="res://features/ui/splash/splash_screen.gd" id="1_splsh"]
+[ext_resource type="Shader" uid="uid://bk5fgmy57stbb" path="res://features/ui/splash/crt_monitor.gdshader" id="2_crt"]
 
 [sub_resource type="SystemFont" id="SystemFont_mono"]
 font_names = PackedStringArray("Courier New", "Courier Prime", "Monospace", "Consolas")

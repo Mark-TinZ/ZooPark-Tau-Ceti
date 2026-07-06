@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=3 uid="uid://game_scene_uid_1"]
 
-[ext_resource type="Script" path="res://scenes/game/world/world_generator.gd" id="1_wg"]
-[ext_resource type="Script" path="res://scenes/game/game.gd" id="1_game"]
-[ext_resource type="Script" path="res://scripts/game/rts_camera.gd" id="2_cam"]
-[ext_resource type="Script" path="res://scripts/game/placement_system.gd" id="3_plac"]
-[ext_resource type="PackedScene" path="res://scenes/game/debug_ui.tscn" id="4_debug"]
-[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="5_pause"]
+[ext_resource type="Script" path="res://features/world/world_generator.gd" id="1_wg"]
+[ext_resource type="Script" path="res://features/game/game.gd" id="1_game"]
+[ext_resource type="Script" path="res://features/camera/rts_camera.gd" id="2_cam"]
+[ext_resource type="Script" path="res://features/buildings/placement_system.gd" id="3_plac"]
+[ext_resource type="PackedScene" path="res://features/ui/debug_ui/debug_ui.tscn" id="4_debug"]
+[ext_resource type="PackedScene" path="res://features/ui/pause_menu/pause_menu.tscn" id="5_pause"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 

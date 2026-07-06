@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cxab3xqw45ty"]
 
-[ext_resource type="Script" path="res://scenes/main_menu/world_creation_menu.gd" id="1_world_creation"]
+[ext_resource type="Script" path="res://features/ui/main_menu/world_creation_menu.gd" id="1_world_creation"]
 
 [node name="Singleplayer" type="MarginContainer"]
 anchors_preset = 15

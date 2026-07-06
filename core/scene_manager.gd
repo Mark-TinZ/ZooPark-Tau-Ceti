@@ -34,7 +34,7 @@ func goto_scene(path: String) -> void:
 # Запуск асинхронной загрузки тяжелой сцены
 func load_scene_async(path: String) -> void:
 	target_path = path
-	goto_scene("res://scenes/loading/loading_screen.tscn")
+	goto_scene("res://features/ui/loading/loading_screen.tscn")
 
 # Плавное затемнение
 func _fade_out() -> void:

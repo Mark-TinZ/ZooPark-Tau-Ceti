@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://7ji7q1echdpc"]
 
-[ext_resource type="Script" uid="uid://cdexobo6rp1vh" path="res://scenes/main_menu/main_menu.gd" id="1_0ebjn"]
+[ext_resource type="Script" uid="uid://cdexobo6rp1vh" path="res://features/ui/main_menu/main_menu.gd" id="1_0ebjn"]
 [ext_resource type="AudioStream" uid="uid://xunu5vlm6wjq" path="res://assets/audio/music/Lost in space.wav" id="1_fsom3"]
-[ext_resource type="PackedScene" path="res://scenes/main_menu/world_creation_menu.tscn" id="2_world"]
-[ext_resource type="PackedScene" path="res://scenes/main_menu/lan_browser.tscn" id="3_lan"]
+[ext_resource type="PackedScene" path="res://features/ui/main_menu/world_creation_menu.tscn" id="2_world"]
+[ext_resource type="PackedScene" path="res://features/ui/main_menu/lan_browser.tscn" id="3_lan"]
 
 [sub_resource type="Gradient" id="Gradient_ob46e"]
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)

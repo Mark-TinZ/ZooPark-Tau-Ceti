@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c8fydrbxr2ho6"]
 
-[ext_resource type="Script" uid="uid://tke51lwm4rmw" path="res://scripts/game/debug_ui.gd" id="1_dbg"]
+[ext_resource type="Script" uid="uid://tke51lwm4rmw" path="res://features/ui/debug_ui/debug_ui.gd" id="1_dbg"]
 
 [node name="DebugUI" type="CanvasLayer" unique_id=1415049240]
 process_mode = 4

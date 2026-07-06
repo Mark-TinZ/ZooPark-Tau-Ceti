@@ -101,7 +101,7 @@ func _on_host_pressed() -> void:
 	if error == OK:
 		multiplayer.multiplayer_peer = peer
 		print("Сервер успешно создан на порту ", HOST_PORT)
-		SceneManager.load_scene_async("res://scenes/game/game.tscn")
+		SceneManager.load_scene_async("res://features/game/game.tscn")
 	else:
 		push_error("Не удалось создать сервер. Ошибка: " + str(error))
 
@@ -111,6 +111,6 @@ func _join_game(ip: String) -> void:
 	if error == OK:
 		multiplayer.multiplayer_peer = peer
 		print("Подключение к ", ip, ":", HOST_PORT)
-		SceneManager.load_scene_async("res://scenes/game/game.tscn")
+		SceneManager.load_scene_async("res://features/game/game.tscn")
 	else:
 		push_error("Ошибка подключения к " + ip)

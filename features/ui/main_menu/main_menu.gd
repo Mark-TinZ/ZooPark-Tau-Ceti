@@ -1,6 +1,6 @@
 extends Control
 
-const SETTINGS_MENU_SCENE = preload("res://scenes/settings_menu/settings_menu.tscn")
+const SETTINGS_MENU_SCENE = preload("res://features/ui/settings_menu/settings_menu.tscn")
 
 @onready var button_start: Button = $MarginContainer/VBoxContainer/MainMenuButtonStart
 @onready var button_settings: Button = $MarginContainer/VBoxContainer/MainMenuButtonSettings

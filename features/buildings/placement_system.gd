@@ -21,7 +21,7 @@ func _ready() -> void:
 	mat_invalid.albedo_color = Color(1, 0, 0, 0.5)
 	mat_invalid.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 
-	var holo_scene = load("res://scenes/game/building_hologram.tscn")
+	var holo_scene = load("res://features/buildings/building_hologram.tscn")
 	if holo_scene:
 		hologram = holo_scene.instantiate() as MeshInstance3D
 		add_child(hologram)
@@ -71,7 +71,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if is_valid_placement and hologram and hologram.visible:
 			print("Здание построено на: ", current_grid_pos)
-			var building_scene = load("res://scenes/game/buildings/building_basic.tscn")
+			var building_scene = load("res://features/buildings/building_basic.tscn")
 			if building_scene:
 				var building = building_scene.instantiate() as Node3D
 				building.add_to_group("buildings")

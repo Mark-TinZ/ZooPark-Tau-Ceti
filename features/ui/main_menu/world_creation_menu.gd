@@ -124,8 +124,8 @@ func _start_game() -> void:
 	GameSaveSystem.current_slot_name = "world_" + datetime
 	GameSaveSystem.last_loaded_data = {} # Clear loaded data when creating new game
 	
-	SceneManager.load_scene_async("res://scenes/game/game.tscn")
+	SceneManager.load_scene_async("res://features/game/game.tscn")
 
 func _load_game(slot_name: String) -> void:
 	GameSaveSystem.load_game(slot_name)
-	SceneManager.load_scene_async("res://scenes/game/game.tscn")
+	SceneManager.load_scene_async("res://features/game/game.tscn")
