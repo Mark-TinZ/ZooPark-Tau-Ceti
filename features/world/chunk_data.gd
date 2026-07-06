@@ -1,21 +1,46 @@
 class_name ChunkData
-extends RefCounted
+extends Resource
 
 var arrays: Array
 var collision_faces: PackedVector3Array
+var tree_matrices: PackedFloat32Array
 var chunk_pos: Vector2
 
-func generate(pos: Vector2, noise: FastNoiseLite, chunk_size: int = 32, vertex_spacing: float = 1.0, height_multiplier: float = 10.0) -> void:
+# Thread safety & Write-Back Cache
+var is_dirty: bool = false
+var mutex: Mutex = Mutex.new()
+
+@export var delta_data: Dictionary = {}
+
+func mark_dirty() -> void:
+	mutex.lock()
+	is_dirty = true
+	mutex.unlock()
+
+func add_building_delta(building_type: String, local_pos: Vector3) -> void:
+	mutex.lock()
+	if not delta_data.has("buildings"):
+		delta_data["buildings"] = []
+	delta_data["buildings"].append({"type": building_type, "pos": [local_pos.x, local_pos.y, local_pos.z]})
+	is_dirty = true
+	mutex.unlock()
+
+func generate(pos: Vector2, noise: FastNoiseLite, humidity_noise: FastNoiseLite, world_seed: int, chunk_size: int = 32, vertex_spacing: float = 1.0, height_multiplier: float = 10.0) -> void:
 	chunk_pos = pos
 	var vert_count = chunk_size + 1
 	var offset_x = pos.x * chunk_size * vertex_spacing
 	var offset_z = pos.y * chunk_size * vertex_spacing
+	
+	var rng = RandomNumberGenerator.new()
+	rng.seed = world_seed + hash(Vector2(pos.x, pos.y))
 	
 	var st = SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
 	var collision_vertices = PackedVector3Array()
 	collision_vertices.resize(vert_count * vert_count)
+	
+	var tree_transforms: Array[Transform3D] = []
 	
 	# Generate vertices
 	for z in range(vert_count):
@@ -25,10 +50,24 @@ func generate(pos: Vector2, noise: FastNoiseLite, chunk_size: int = 32, vertex_s
 			var world_z = offset_z + z * vertex_spacing
 			
 			var y = noise.get_noise_2d(world_x, world_z) * height_multiplier
+			var hum = humidity_noise.get_noise_2d(world_x, world_z)
 			
 			var vertex = Vector3(x * vertex_spacing, y, z * vertex_spacing)
 			collision_vertices[i] = vertex
 			st.set_uv(Vector2(float(x) / chunk_size, float(z) / chunk_size))
+			
+			# Раскраска вертексов по биомам (по желанию, но пока просто сохраняем влажность)
+			# Но мы просто ставим деревья
+			if y > 2.0 and y < 8.0 and hum > 0.1:
+				if rng.randf() < 0.05: # 5% шанс дерева на вертекс
+					var scale_val = rng.randf_range(0.8, 1.5)
+					var rot_y = rng.randf_range(0, TAU)
+					
+					# Transform3D(Basis, Origin)
+					var basis = Basis().scaled(Vector3(scale_val, scale_val, scale_val)).rotated(Vector3.UP, rot_y)
+					var t = Transform3D(basis, vertex)
+					tree_transforms.append(t)
+			
 			st.add_vertex(vertex)
 			
 	# Generate indices
@@ -64,3 +103,24 @@ func generate(pos: Vector2, noise: FastNoiseLite, chunk_size: int = 32, vertex_s
 	st.generate_normals()
 	st.generate_tangents()
 	arrays = st.commit_to_arrays()
+
+	# Pack tree transforms into 12-float array for MultiMesh
+	tree_matrices.resize(tree_transforms.size() * 12)
+	var m_idx = 0
+	for t in tree_transforms:
+		tree_matrices[m_idx] = t.basis.x.x
+		tree_matrices[m_idx+1] = t.basis.x.y
+		tree_matrices[m_idx+2] = t.basis.x.z
+		tree_matrices[m_idx+3] = t.origin.x
+		
+		tree_matrices[m_idx+4] = t.basis.y.x
+		tree_matrices[m_idx+5] = t.basis.y.y
+		tree_matrices[m_idx+6] = t.basis.y.z
+		tree_matrices[m_idx+7] = t.origin.y
+		
+		tree_matrices[m_idx+8] = t.basis.z.x
+		tree_matrices[m_idx+9] = t.basis.z.y
+		tree_matrices[m_idx+10] = t.basis.z.z
+		tree_matrices[m_idx+11] = t.origin.z
+		
+		m_idx += 12

@@ -12,6 +12,8 @@ var current_grid_pos: Vector3 = Vector3.ZERO
 var mat_valid: StandardMaterial3D
 var mat_invalid: StandardMaterial3D
 
+var last_input_was_gamepad: bool = false
+
 func _ready() -> void:
 	mat_valid = StandardMaterial3D.new()
 	mat_valid.albedo_color = Color(0, 1, 0, 0.5)
@@ -35,12 +37,21 @@ func _process(_delta: float) -> void:
 	if not viewport:
 		return
 		
-	var mouse_pos = viewport.get_mouse_position()
-	var origin = camera.project_ray_origin(mouse_pos)
-	var normal = camera.project_ray_normal(mouse_pos)
-	var end = origin + normal * 1000.0
+	var ray_origin = Vector3.ZERO
+	var ray_normal = Vector3.ZERO
 	
-	var query = PhysicsRayQueryParameters3D.create(origin, end)
+	if last_input_was_gamepad:
+		var center = viewport.get_visible_rect().size / 2.0
+		ray_origin = camera.project_ray_origin(center)
+		ray_normal = camera.project_ray_normal(center)
+	else:
+		var mouse_pos = viewport.get_mouse_position()
+		ray_origin = camera.project_ray_origin(mouse_pos)
+		ray_normal = camera.project_ray_normal(mouse_pos)
+		
+	var end = ray_origin + ray_normal * 1000.0
+	
+	var query = PhysicsRayQueryParameters3D.create(ray_origin, end)
 	var result = space_state.intersect_ray(query)
 	
 	if result:
@@ -68,22 +79,23 @@ func _process(_delta: float) -> void:
 		hologram.hide()
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventJoypadMotion or event is InputEventJoypadButton:
+		last_input_was_gamepad = true
+	elif event is InputEventMouseMotion or event is InputEventMouseButton:
+		last_input_was_gamepad = false
+		
+	var place_pressed = false
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		place_pressed = true
+	elif event.is_action_pressed("ui_accept"):
+		place_pressed = true
+		
+	if place_pressed:
 		if is_valid_placement and hologram and hologram.visible:
 			print("Здание построено на: ", current_grid_pos)
-			var building_scene = load("res://features/buildings/building_basic.tscn")
-			if building_scene:
-				var building = building_scene.instantiate() as Node3D
-				building.add_to_group("buildings")
-				
-				# Get or create Buildings node to keep scene tree clean
-				var buildings_parent = get_tree().current_scene.get_node_or_null("Buildings")
-				if not buildings_parent:
-					buildings_parent = Node3D.new()
-					buildings_parent.name = "Buildings"
-					get_tree().current_scene.add_child(buildings_parent)
-					
-				buildings_parent.add_child(building)
-				building.global_position = current_grid_pos
-				# Store type for save system
-				building.set_meta("building_type", "building_basic")
+			
+			var world_gen = get_tree().current_scene.get_node_or_null("WorldGenerator")
+			if world_gen and world_gen.has_method("add_building_to_chunk"):
+				world_gen.add_building_to_chunk(current_grid_pos, "building_basic")
+			else:
+				push_error("PlacementSystem: WorldGenerator не найден!")

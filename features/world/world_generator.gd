@@ -13,6 +13,8 @@ extends Node3D
 @export var height_multiplier: float = 10.0
 
 var noise: FastNoiseLite
+var humidity_noise: FastNoiseLite
+var world_seed: int
 
 var active_chunks: Dictionary = {} # Vector2 -> Chunk
 var inactive_chunks: Array[Chunk] = []
@@ -28,13 +30,20 @@ var terrain_material: StandardMaterial3D
 
 func _ready() -> void:
 	noise = FastNoiseLite.new()
+	humidity_noise = FastNoiseLite.new()
 	
 	# Получаем сид из GameSaveSystem (с флагом use_random_seed)
-	noise.seed = GameSaveSystem.get_effective_seed()
+	world_seed = GameSaveSystem.get_effective_seed()
+	noise.seed = world_seed
+	humidity_noise.seed = world_seed + 12345
 	
 	noise.fractal_type = FastNoiseLite.FRACTAL_FBM
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	noise.frequency = 0.005 # Плавные холмы
+	
+	humidity_noise.fractal_type = FastNoiseLite.FRACTAL_FBM
+	humidity_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
+	humidity_noise.frequency = 0.005
 	
 	terrain_material = StandardMaterial3D.new()
 	terrain_material.albedo_color = Color(0.2, 0.4, 0.2) # Темно-зеленый цвет
@@ -79,6 +88,8 @@ func _update_chunks(center_chunk: Vector2) -> void:
 	for pos in active_chunks.keys():
 		if not required_chunks.has(pos):
 			var chunk = active_chunks[pos]
+			if chunk.chunk_data and has_node("/root/ChunkManager"):
+				get_node("/root/ChunkManager").queue_chunk_for_save(chunk.chunk_data)
 			chunk.hide_and_disable()
 			inactive_chunks.append(chunk)
 			keys_to_remove.append(pos)
@@ -103,15 +114,26 @@ func _dispatch_tasks() -> void:
 	
 	while chunks_to_generate.size() > 0 and active_tasks.size() < max_threads:
 		var pos = chunks_to_generate.pop_front()
-		var task_id = WorkerThreadPool.add_task(_generate_chunk_thread.bind(pos), true)
+		
+		# Пытаемся загрузить дельту с диска перед генерацией
+		var saved_delta = {}
+		if has_node("/root/ChunkManager"):
+			var saved_data = get_node("/root/ChunkManager").load_chunk_data(pos)
+			if saved_data:
+				saved_delta = saved_data.delta_data
+				
+		var task_id = WorkerThreadPool.add_task(_generate_chunk_thread.bind(pos, saved_delta), true)
 		active_tasks[task_id] = pos
 
-func _generate_chunk_thread(pos: Vector2) -> void:
+func _generate_chunk_thread(pos: Vector2, saved_delta: Dictionary) -> void:
 	# Замер времени генерации
 	var start_usec = Time.get_ticks_usec()
 	
 	var data = ChunkData.new()
-	data.generate(pos, noise, chunk_size, vertex_spacing, height_multiplier)
+	if not saved_delta.is_empty():
+		data.delta_data = saved_delta
+		
+	data.generate(pos, noise, humidity_noise, world_seed, chunk_size, vertex_spacing, height_multiplier)
 	
 	var elapsed_usec = Time.get_ticks_usec() - start_usec
 	
@@ -172,3 +194,23 @@ func get_height_at_pos(world_x: float, world_z: float) -> float:
 	# Запрашиваем высоту напрямую у FastNoiseLite (без физики!)
 	# Это та же формула, что и в ChunkData.generate()
 	return noise.get_noise_2d(world_x, world_z) * height_multiplier
+
+# ========== ВЗАИМОДЕЙСТВИЕ СО ЗДАНИЯМИ ==========
+
+func add_building_to_chunk(global_pos: Vector3, building_type: String) -> void:
+	var c_x = floor(global_pos.x / (chunk_size * vertex_spacing))
+	var c_z = floor(global_pos.z / (chunk_size * vertex_spacing))
+	var pos2d = Vector2(c_x, c_z)
+	
+	if active_chunks.has(pos2d):
+		var chunk = active_chunks[pos2d]
+		if chunk.chunk_data:
+			chunk.chunk_data.add_building_delta(building_type, global_pos)
+			
+			# Сразу спавним в мире, чтобы игрок видел
+			var b_scene = load("res://features/buildings/building_basic.tscn")
+			if b_scene:
+				var b = b_scene.instantiate() as Node3D
+				chunk.add_child(b)
+				b.add_to_group("buildings")
+				b.global_position = global_pos

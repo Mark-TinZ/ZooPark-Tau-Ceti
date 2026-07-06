@@ -22,10 +22,11 @@ buses/default_bus_layout="uid://bcmcw2c2ppx3l"
 [autoload]
 
 SceneManager="*res://core/scene_manager.gd"
-SaveManager="*uid://cljigkglxpytq"
 ThemeManager="*res://core/theme_manager.gd"
 GameSaveSystem="*res://core/game_save_system.gd"
 PerformanceMonitor="*res://core/performance_monitor.gd"
+ChunkManager="*res://core/chunk_manager.gd"
+SettingsManager="*res://core/settings_manager.gd"
 
 [display]
 

@@ -1,33 +1,45 @@
 extends Node3D
 
+@onready var world_env: WorldEnvironment = $WorldEnvironment
+@onready var world_generator: WorldGenerator = $WorldGenerator
+
 func _ready() -> void:
 	if not GameSaveSystem.last_loaded_data.is_empty():
 		_restore_from_save(GameSaveSystem.last_loaded_data)
 		
-	# Add pause tracking or any other Game specific initialization here
+	if has_node("/root/SettingsManager"):
+		var sm = get_node("/root/SettingsManager")
+		sm.environment_settings_changed.connect(_apply_env_settings)
+		_apply_env_settings()
+
+func _apply_env_settings() -> void:
+	if not world_env or not world_env.environment:
+		return
+	var sm = get_node("/root/SettingsManager")
+	var env = world_env.environment
+	env.glow_enabled = sm.get_bloom_enabled()
+	env.adjustment_enabled = true
+	env.adjustment_brightness = sm.get_brightness()
+	env.ssao_enabled = sm.get_ssao_enabled()
+	env.ssr_enabled = sm.get_ssr_enabled()
+	
+	# Fog setup (exponential standard fog, based on Render Distance)
+	var view_dist = 3
+	if world_generator:
+		view_dist = world_generator.view_distance
+		
+	var fog_distance = view_dist * 32.0 * 1.0 # view_distance * chunk_size * vertex_spacing
+	env.fog_enabled = true
+	env.fog_mode = Environment.FOG_MODE_EXPONENTIAL
+	# Tuning density: e^(-density * distance)
+	env.fog_density = 1.0 / (fog_distance * 0.8) 
+	
+	if env.sky and env.sky.sky_material is ProceduralSkyMaterial:
+		env.fog_light_color = (env.sky.sky_material as ProceduralSkyMaterial).sky_top_color
+	else:
+		env.fog_light_color = Color(0.5, 0.6, 0.7)
 
 func _restore_from_save(data: Dictionary) -> void:
 	# 1. Restore Camera
 	GameSaveSystem.apply_camera_data(self, data)
-	
-	# 2. Restore Buildings
-	var buildings_data = data.get("buildings", [])
-	if buildings_data.size() > 0:
-		var buildings_parent = get_node_or_null("Buildings")
-		if not buildings_parent:
-			buildings_parent = Node3D.new()
-			buildings_parent.name = "Buildings"
-			add_child(buildings_parent)
-			
-		for b_data in buildings_data:
-			var b_type = b_data.get("type", "building_basic")
-			var b_pos = b_data.get("position", [0, 0, 0])
-			
-			var scene_path = "res://scenes/game/buildings/" + b_type + ".tscn"
-			if ResourceLoader.exists(scene_path):
-				var b_scene = load(scene_path)
-				var building = b_scene.instantiate() as Node3D
-				building.add_to_group("buildings")
-				building.global_position = Vector3(b_pos[0], b_pos[1], b_pos[2])
-				building.set_meta("building_type", b_type)
-				buildings_parent.add_child(building)
+	# Здания теперь загружаются автоматически через ChunkManager при стриминге чанков

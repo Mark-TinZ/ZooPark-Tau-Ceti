@@ -68,20 +68,13 @@ func _process(delta: float) -> void:
 # ========== ПЕРЕМЕЩЕНИЕ (WASD) ==========
 
 func _handle_movement(delta: float) -> void:
-	var input_dir = Vector3.ZERO
-	
-	if Input.is_physical_key_pressed(KEY_W) or Input.is_action_pressed("ui_up"):
-		input_dir.z -= 1
-	if Input.is_physical_key_pressed(KEY_S) or Input.is_action_pressed("ui_down"):
-		input_dir.z += 1
-	if Input.is_physical_key_pressed(KEY_A) or Input.is_action_pressed("ui_left"):
-		input_dir.x -= 1
-	if Input.is_physical_key_pressed(KEY_D) or Input.is_action_pressed("ui_right"):
-		input_dir.x += 1
+	# Получаем вектор ввода от геймпада или клавиатуры
+	var input_vec = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_dir = Vector3(input_vec.x, 0, input_vec.y)
 	
 	if input_dir.length_squared() > 0:
-		# Направление относительно текущего поворота CameraYaw
-		input_dir = input_dir.normalized().rotated(Vector3.UP, _camera_yaw.rotation.y)
+		# Направление относительно текущего поворота CameraYaw (изометрическая трансформация)
+		input_dir = input_dir.rotated(Vector3.UP, _camera_yaw.rotation.y)
 		position += input_dir * move_speed * delta
 
 # ========== ЗУМ (КОЛЁСИКО МЫШИ) ==========

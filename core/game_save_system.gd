@@ -62,14 +62,6 @@ func save_game(slot_name: String) -> void:
 	if not game_node:
 		save_completed.emit(false, slot_name)
 		return
-	
-	var buildings_data = []
-	var buildings = get_tree().get_nodes_in_group("buildings")
-	for b in buildings:
-		buildings_data.append({
-			"position": [b.global_position.x, b.global_position.y, b.global_position.z],
-			"type": b.get_meta("building_type", "building_basic")
-		})
 		
 	var save_data = {
 		"version": SAVE_VERSION,
@@ -80,7 +72,6 @@ func save_game(slot_name: String) -> void:
 		"game_mode": current_game_mode,
 		"capital": current_capital,
 		"camera": _collect_camera_data(game_node),
-		"buildings": buildings_data,
 		"play_time_seconds": 0,  # TODO: Считать время игры
 	}
 	
@@ -99,6 +90,11 @@ func save_game(slot_name: String) -> void:
 	_write_meta(slot_name, save_data)
 	
 	current_slot_name = slot_name
+	
+	# Форсируем сброс чанков на диск
+	if has_node("/root/ChunkManager"):
+		get_node("/root/ChunkManager")._on_flush_timeout()
+		
 	save_completed.emit(true, slot_name)
 
 func _collect_camera_data(game_node: Node) -> Dictionary:
@@ -177,9 +173,8 @@ func load_game(slot_name: String) -> Dictionary:
 	
 	last_loaded_data = data
 	
-	# We also need to spawn the buildings!
-	# Since load_game might be called before game_node is ready, we let the game scene ask for it or emit a signal.
-	# Actually, returning data is good enough, game.gd or somewhere will reconstruct.
+	if has_node("/root/ChunkManager"):
+		get_node("/root/ChunkManager").start_manager(slot_name)
 	
 	load_completed.emit(true, data)
 	return data
