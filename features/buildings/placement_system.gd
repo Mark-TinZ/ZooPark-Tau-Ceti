@@ -7,12 +7,15 @@ extends Node3D
 
 var hologram: MeshInstance3D
 var is_valid_placement: bool = false
+var is_placement_mode: bool = false
 var current_grid_pos: Vector3 = Vector3.ZERO
+
+var current_item_type: String = ""
+var current_item_data: Dictionary = {}
 
 var mat_valid: StandardMaterial3D
 var mat_invalid: StandardMaterial3D
 
-var last_input_was_gamepad: bool = false
 
 func _ready() -> void:
 	mat_valid = StandardMaterial3D.new()
@@ -27,9 +30,24 @@ func _ready() -> void:
 	if holo_scene:
 		hologram = holo_scene.instantiate() as MeshInstance3D
 		add_child(hologram)
+		hologram.hide()
+
+func start_placement(item_type: String, item_data: Dictionary) -> void:
+	current_item_type = item_type
+	current_item_data = item_data
+	is_placement_mode = true
+	if hologram:
+		hologram.show()
+
+func cancel_placement() -> void:
+	is_placement_mode = false
+	current_item_type = ""
+	current_item_data = {}
+	if hologram:
+		hologram.hide()
 
 func _process(_delta: float) -> void:
-	if not camera or not hologram:
+	if not is_placement_mode or not camera or not hologram:
 		return
 		
 	var space_state = get_world_3d().direct_space_state
@@ -37,21 +55,15 @@ func _process(_delta: float) -> void:
 	if not viewport:
 		return
 		
-	var ray_origin = Vector3.ZERO
-	var ray_normal = Vector3.ZERO
-	
-	if last_input_was_gamepad:
-		var center = viewport.get_visible_rect().size / 2.0
-		ray_origin = camera.project_ray_origin(center)
-		ray_normal = camera.project_ray_normal(center)
-	else:
-		var mouse_pos = viewport.get_mouse_position()
-		ray_origin = camera.project_ray_origin(mouse_pos)
-		ray_normal = camera.project_ray_normal(mouse_pos)
+	var cursor_pos = VirtualCursorUI.cursor_pos
+	var ray_origin = camera.project_ray_origin(cursor_pos)
+	var ray_normal = camera.project_ray_normal(cursor_pos)
 		
 	var end = ray_origin + ray_normal * 1000.0
-	
+
 	var query = PhysicsRayQueryParameters3D.create(ray_origin, end)
+	query.collision_mask = 1 # Слой 1 - Terrain
+	
 	var result = space_state.intersect_ray(query)
 	
 	if result:
@@ -78,11 +90,9 @@ func _process(_delta: float) -> void:
 	else:
 		hologram.hide()
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventJoypadMotion or event is InputEventJoypadButton:
-		last_input_was_gamepad = true
-	elif event is InputEventMouseMotion or event is InputEventMouseButton:
-		last_input_was_gamepad = false
+func _unhandled_input(event: InputEvent) -> void:
+	if not is_placement_mode:
+		return
 		
 	var place_pressed = false
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -92,10 +102,25 @@ func _input(event: InputEvent) -> void:
 		
 	if place_pressed:
 		if is_valid_placement and hologram and hologram.visible:
-			print("Здание построено на: ", current_grid_pos)
-			
-			var world_gen = get_tree().current_scene.get_node_or_null("WorldGenerator")
-			if world_gen and world_gen.has_method("add_building_to_chunk"):
-				world_gen.add_building_to_chunk(current_grid_pos, "building_basic")
+			var price = current_item_data.get("price", 0)
+			if EconomyManager.spend_money(price):
+				print("Деньги списаны! Здание построено на: ", current_grid_pos)
+				
+				var world_gen = get_tree().current_scene.get_node_or_null("WorldGenerator")
+				if world_gen and world_gen.has_method("add_building_to_chunk"):
+					var enclosure = Enclosure.new()
+					enclosure.climate = current_item_data.get("climate", 0)
+					EconomyManager.enclosures.append(enclosure)
+					
+					world_gen.add_building_to_chunk(hologram.global_transform, "building_basic", enclosure)
+					cancel_placement() # Выключаем режим стройки после успешной установки
+				else:
+					push_error("PlacementSystem: WorldGenerator не найден!")
 			else:
-				push_error("PlacementSystem: WorldGenerator не найден!")
+				print("Недостаточно денег для постройки!")
+			
+			get_viewport().set_input_as_handled()
+	
+	if event.is_action_pressed("ui_cancel") or event.is_action_pressed("ui_accept"):
+		cancel_placement()
+		get_viewport().set_input_as_handled()
