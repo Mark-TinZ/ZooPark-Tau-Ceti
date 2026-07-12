@@ -24,6 +24,14 @@ func _ready() -> void:
 	# Подключаем сигнал подтверждения выхода
 	exit_confirmation.confirmed.connect(_on_exit_confirmed)
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventJoypadMotion or event is InputEventJoypadButton:
+		if get_viewport().gui_get_focus_owner() == null and visible:
+			if play_panel.visible:
+				button_back.grab_focus()
+			else:
+				button_start.grab_focus()
+
 func _on_start_pressed() -> void:
 	play_panel.show()
 	# TODO: grab focus on the first item in PlayPanel

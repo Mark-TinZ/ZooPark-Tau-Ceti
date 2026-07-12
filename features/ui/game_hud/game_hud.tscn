@@ -1,0 +1,180 @@
+[gd_scene load_steps=3 format=3 uid="uid://gamehud0000001"]
+
+[ext_resource type="Script" path="res://features/ui/game_hud/game_hud.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://maintheme00000" path="res://features/ui/main_theme.tres" id="1_theme"]
+
+[node name="GameHud" type="CanvasLayer"]
+script = ExtResource("1_script")
+
+[node name="HUDContainer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+mouse_filter = 2
+
+[node name="TopBar" type="PanelContainer" parent="HUDContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 20.0
+offset_right = 250.0
+offset_bottom = 60.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HUDContainer/TopBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUDContainer/TopBar/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="MoneyLabel" type="Label" parent="HUDContainer/TopBar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Деньги: $10,000"
+
+[node name="VSeparator" type="VSeparator" parent="HUDContainer/TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="PowerLabel" type="Label" parent="HUDContainer/TopBar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Энергия: 50/100 kW"
+
+[node name="VSeparator2" type="VSeparator" parent="HUDContainer/TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="StaffLabel" type="Label" parent="HUDContainer/TopBar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Персонал: 3"
+
+[node name="VSeparator3" type="VSeparator" parent="HUDContainer/TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="TimeLabel" type="Label" parent="HUDContainer/TopBar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "День 1, 12:00"
+
+[node name="VSeparator4" type="VSeparator" parent="HUDContainer/TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="EnclosureLabel" type="Label" parent="HUDContainer/TopBar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Выбран вольер: Нет"
+
+[node name="BottomBar" type="PanelContainer" parent="HUDContainer"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -80.0
+offset_right = 300.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="HUDContainer/BottomBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUDContainer/BottomBar/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="BtnTerraform" type="Button" parent="HUDContainer/BottomBar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Терраформинг"
+
+[node name="BtnPaths" type="Button" parent="HUDContainer/BottomBar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Дорожки"
+
+[node name="BtnEnclosures" type="Button" parent="HUDContainer/BottomBar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Вольеры"
+
+[node name="BtnInfra" type="Button" parent="HUDContainer/BottomBar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Инфраструктура"
+
+[node name="BtnShop" type="Button" parent="HUDContainer/BottomBar/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Магазин (F4)"
+
+[node name="ShopPanel" type="PanelContainer" parent="HUDContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -200.0
+offset_right = 250.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HUDContainer/ShopPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUDContainer/ShopPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="HeaderBox" type="HBoxContainer" parent="HUDContainer/ShopPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="HUDContainer/ShopPanel/MarginContainer/VBoxContainer/HeaderBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Магазин: Животные и Вольеры"
+
+[node name="BtnCloseShop" type="Button" parent="HUDContainer/ShopPanel/MarginContainer/VBoxContainer/HeaderBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "X"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HUDContainer/ShopPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ShopItemsGrid" type="GridContainer" parent="HUDContainer/ShopPanel/MarginContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10

@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://xnf763p234ai"]
+[gd_scene load_steps=2 format=3 uid="uid://xnf763p234ai"]
 
 [ext_resource type="Script" uid="uid://e6ojy26lbl57" path="res://features/ui/settings_menu/settings_menu.gd" id="1_j78aw"]
 
@@ -10,3 +10,502 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_j78aw")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.701961)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(750, 550)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "KEY_SETTINGS_TITLE"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TabContainer" type="TabContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Game" type="MarginContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+metadata/_tab_index = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LanguageContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/ScrollContainer/VBoxContainer/LanguageContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_LANGUAGE"
+
+[node name="LanguageButton" type="OptionButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/ScrollContainer/VBoxContainer/LanguageContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScaleContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/ScrollContainer/VBoxContainer/ScaleContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_UI_SCALE"
+
+[node name="ScaleButton" type="OptionButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/ScrollContainer/VBoxContainer/ScaleContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SubtitlesContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/ScrollContainer/VBoxContainer/SubtitlesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_SUBTITLES"
+
+[node name="SubtitlesCheck" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Game/ScrollContainer/VBoxContainer/SubtitlesContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Audio" type="MarginContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+metadata/_tab_index = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MasterContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/MasterContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_MASTER_VOLUME"
+
+[node name="MasterSlider" type="HSlider" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/MasterContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+
+[node name="MasterPct" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/MasterContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="MusicContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/MusicContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_MUSIC_VOLUME"
+
+[node name="MusicSlider" type="HSlider" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/MusicContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+
+[node name="MusicPct" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/MusicContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="SfxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/SfxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_SFX_VOLUME"
+
+[node name="SfxSlider" type="HSlider" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/SfxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+
+[node name="SfxPct" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/SfxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="VoiceContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/VoiceContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_VOICE_VOLUME"
+
+[node name="VoiceSlider" type="HSlider" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/VoiceContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+
+[node name="VoicePct" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/VoiceContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="UiContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/UiContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_UI_VOLUME"
+
+[node name="UiSlider" type="HSlider" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/UiContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+
+[node name="UiPct" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Audio/ScrollContainer/VBoxContainer/UiContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="Graphics" type="MarginContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+metadata/_tab_index = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResolutionContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/ResolutionContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_RESOLUTION"
+
+[node name="ResolutionButton" type="OptionButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/ResolutionContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DisplayModeContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/DisplayModeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_DISPLAY_MODE"
+
+[node name="DisplayModeButton" type="OptionButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/DisplayModeContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VsyncContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/VsyncContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_VSYNC"
+
+[node name="VsyncButton" type="OptionButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/VsyncContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MaxFpsContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MaxFpsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_MAX_FPS"
+
+[node name="MaxFpsButton" type="OptionButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MaxFpsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MsaaContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MsaaContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_MSAA"
+
+[node name="MsaaButton" type="OptionButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/MsaaContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FxaaContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/FxaaContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_FXAA"
+
+[node name="FxaaCheck" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/FxaaContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TaaContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/TaaContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_TAA"
+
+[node name="TaaCheck" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/TaaContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ShadowQualityContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/ShadowQualityContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_SHADOW_QUALITY"
+
+[node name="ShadowQualityButton" type="OptionButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/ShadowQualityContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BloomContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/BloomContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_BLOOM"
+
+[node name="BloomCheck" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/BloomContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SsaoContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/SsaoContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_SSAO"
+
+[node name="SsaoCheck" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/SsaoContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SsrContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/SsrContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_SSR"
+
+[node name="SsrCheck" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/SsrContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RenderScaleContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/RenderScaleContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_RENDER_SCALE"
+
+[node name="RenderScaleSlider" type="HSlider" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/RenderScaleContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.1
+max_value = 2.0
+step = 0.05
+value = 1.0
+
+[node name="RenderScalePct" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/RenderScaleContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="FsrSharpnessContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/FsrSharpnessContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_FSR_SHARPNESS"
+
+[node name="FsrSharpnessSlider" type="HSlider" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/FsrSharpnessContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 2.0
+step = 0.1
+value = 0.2
+
+[node name="FsrSharpnessPct" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/FsrSharpnessContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "10%"
+horizontal_alignment = 2
+
+[node name="BrightnessContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/BrightnessContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KEY_BRIGHTNESS"
+
+[node name="BrightnessSlider" type="HSlider" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/BrightnessContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 2.0
+step = 0.05
+value = 1.0
+
+[node name="BrightnessPct" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/BrightnessContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="Controls" type="MarginContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+metadata/_tab_index = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Controls"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Controls/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ControlsGrid" type="GridContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Controls/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 32
+theme_override_constants/v_separation = 16
+columns = 2
+
+[node name="BottomBar" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/BottomBar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "KEY_SETTINGS_EXIT"

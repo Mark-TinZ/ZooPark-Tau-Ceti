@@ -23,7 +23,11 @@ func _ready() -> void:
 	main_menu_btn.pressed.connect(_on_main_menu)
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
+	if event is InputEventJoypadMotion or event is InputEventJoypadButton:
+		if visible and get_viewport().gui_get_focus_owner() == null:
+			resume_btn.grab_focus()
+			
+	if event.is_action_pressed("ui_pause") and not event.is_echo():
 		if _is_saving:
 			return  # Не позволяем закрыть во время сохранения
 		
@@ -48,6 +52,7 @@ func _pause() -> void:
 	get_tree().paused = true
 	visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	resume_btn.grab_focus()
 
 func _unpause() -> void:
 	get_tree().paused = false
