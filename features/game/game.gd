@@ -43,3 +43,42 @@ func _restore_from_save(data: Dictionary) -> void:
 	# 1. Restore Camera
 	GameSaveSystem.apply_camera_data(self, data)
 	# Здания теперь загружаются автоматически через ChunkManager при стриминге чанков
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		var placement = get_node_or_null("PlacementSystem")
+		if placement and placement.is_placement_mode:
+			return # Если мы строим, выделение не работает
+			
+		var camera = get_viewport().get_camera_3d()
+		if not camera:
+			return
+			
+		var space_state = get_world_3d().direct_space_state
+		var cursor_pos = get_viewport().get_mouse_position()
+		
+		# VirtualCursorUI может использоваться при игре с геймпада
+		if has_node("/root/VirtualCursorUI"):
+			var virtual_cursor = get_node("/root/VirtualCursorUI")
+			if virtual_cursor.visible:
+				cursor_pos = virtual_cursor.cursor_pos
+				
+		var ray_origin = camera.project_ray_origin(cursor_pos)
+		var ray_normal = camera.project_ray_normal(cursor_pos)
+		var end = ray_origin + ray_normal * 1000.0
+
+		var query = PhysicsRayQueryParameters3D.create(ray_origin, end)
+		query.collision_mask = 8 # Слой 4 - Buildings
+		
+		var result = space_state.intersect_ray(query)
+		if result:
+			var hit_node = result.collider.get_parent()
+			if "enclosure_data" in hit_node and hit_node.enclosure_data != null:
+				EconomyManager.active_enclosure = hit_node.enclosure_data
+				print("Выделен вольер: ", hit_node.enclosure_data.climate)
+			else:
+				# Кликнули по зданию, но это не вольер
+				EconomyManager.active_enclosure = null
+		else:
+			# Кликнули в пустоту
+			EconomyManager.active_enclosure = null

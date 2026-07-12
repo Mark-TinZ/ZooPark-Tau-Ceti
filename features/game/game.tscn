@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://features/buildings/placement_system.gd" id="3_plac"]
 [ext_resource type="PackedScene" path="res://features/ui/debug_ui/debug_ui.tscn" id="4_debug"]
 [ext_resource type="PackedScene" path="res://features/ui/pause_menu/pause_menu.tscn" id="5_pause"]
+[ext_resource type="PackedScene" path="res://features/ui/game_hud/game_hud.tscn" id="6_hud"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 
@@ -51,5 +52,7 @@ script = ExtResource("3_plac")
 camera = NodePath("../RTSCameraPivot/CameraYaw/SpringArm3D/Camera3D")
 
 [node name="DebugUI" parent="." instance=ExtResource("4_debug")]
+
+[node name="GameHud" parent="." instance=ExtResource("6_hud")]
 
 [node name="PauseMenu" parent="." instance=ExtResource("5_pause")]
