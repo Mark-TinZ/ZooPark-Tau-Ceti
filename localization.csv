@@ -76,3 +76,42 @@ KEY_DEBUG_RENDER,═ РЕНДЕР ═,═ RENDER ═
 KEY_DEBUG_MEMORY,═ ПАМЯТЬ ═,═ MEMORY ═
 KEY_DEBUG_WORLD,═ МИР ═,═ WORLD ═
 KEY_DEBUG_HINT,F3 — Дебаг | F4 — Снимок,F3 — Debug | F4 — Snapshot
+KEY_CONTROLS_MOVE,Движение камеры,Camera Movement
+KEY_CONTROLS_ROTATE,Вращение камеры,Camera Rotation
+KEY_CONTROLS_ZOOM,Зум камеры,Camera Zoom
+KEY_CONTROLS_CURSOR,Управление курсором,Cursor Control
+KEY_CONTROLS_PLACE,Построить / Принять,Place / Accept
+KEY_CONTROLS_PAUSE,Пауза / Назад,Pause / Back
+KEY_RENDER_SCALE,Масштаб рендера,Render Scale
+KEY_FSR_SHARPNESS,Резкость FSR,FSR Sharpness
+KEY_MASTER_VOLUME,Общая громкость,Master Volume
+KEY_MUSIC_VOLUME,Музыка,Music
+KEY_SFX_VOLUME,Звуковые эффекты,SFX
+KEY_VOICE_VOLUME,Голос,Voice
+KEY_UI_VOLUME,Интерфейс,UI
+KEY_RESOLUTION,Разрешение,Resolution
+KEY_DISPLAY_MODE,Режим экрана,Display Mode
+KEY_ACTION_MOVE_FORWARD,Вперед,Forward
+KEY_ACTION_MOVE_BACKWARD,Назад,Backward
+KEY_ACTION_MOVE_LEFT,Влево,Left
+KEY_ACTION_MOVE_RIGHT,Вправо,Right
+KEY_ACTION_UI_ACCEPT,Выбор / Подтвердить,Select / Accept
+KEY_ACTION_UI_CANCEL,Отмена / Назад,Cancel / Back
+Controls,Управление,Controls
+KEY_CONTROLS_MOVE_UP,Движение камеры: Вверх,Camera Move: Up
+KEY_CONTROLS_MOVE_DOWN,Движение камеры: Вниз,Camera Move: Down
+KEY_CONTROLS_MOVE_LEFT,Движение камеры: Влево,Camera Move: Left
+KEY_CONTROLS_MOVE_RIGHT,Движение камеры: Вправо,Camera Move: Right
+KEY_CONTROLS_ROTATE_LEFT,Вращение камеры: Влево,Camera Rotate: Left
+HUD_MONEY,Деньги: $%d,Money: $%d
+HUD_POWER,Энергия: %d/%d kW,Power: %d/%d kW
+HUD_STAFF,Персонал: %d,Staff: %d
+HUD_TIME,День %d,Day %d
+HUD_BTN_TERRAFORM,Терраформинг,Terraforming
+HUD_BTN_PATHS,Дорожки,Paths
+HUD_BTN_ENCLOSURES,Вольеры,Enclosures
+HUD_BTN_INFRA,Инфраструктура,Infrastructure
+HUD_BTN_SHOP,Магазин (F4),Shop (F4)
+SHOP_TITLE,Магазин: Животные и Вольеры,Shop: Animals & Enclosures
+SHOP_BTN_BUY,Купить,Buy
+SHOP_NO_ENCLOSURE,Сначала выберите вольер!,Select an enclosure first!
