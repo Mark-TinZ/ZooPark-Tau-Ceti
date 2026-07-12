@@ -162,10 +162,8 @@ func _setup_hslider():
 	slider_fill.content_margin_left = 0
 	slider_fill.content_margin_right = 0
 	
-	# Ручка (grabber) — через StyleBoxFlat создаём квадратную ручку
-	var grabber_normal = _make_flat(COL_SLIDER_GRAB, COL_ACCENT, 10, 2, 0)
-	var grabber_hover = _make_flat(Color.WHITE, COL_ACCENT, 10, 2, 0)
-	var grabber_disabled = _make_flat(COL_DISABLED, COL_BORDER, 10, 1, 0)
+	# Ручка (grabber) использует стандартную иконку Godot, 
+	# так как StyleBoxFlat не может быть напрямую назначен как иконка.
 	
 	theme.set_stylebox("slider", "HSlider", slider_bg)
 	theme.set_stylebox("grabber_area", "HSlider", slider_fill)

@@ -76,7 +76,11 @@ func save_game(slot_name: String) -> void:
 	}
 	
 	# Запись в файл (в основном потоке — данные маленькие)
-	var file_path = SAVES_DIR + slot_name + ".json"
+	var dir_path = SAVES_DIR + slot_name + "/"
+	if not DirAccess.dir_exists_absolute(dir_path):
+		DirAccess.make_dir_recursive_absolute(dir_path)
+		
+	var file_path = dir_path + "meta.dat"
 	var file = FileAccess.open(file_path, FileAccess.WRITE)
 	if not file:
 		push_error("GameSaveSystem: Не удалось открыть файл для записи: " + file_path)
@@ -85,9 +89,6 @@ func save_game(slot_name: String) -> void:
 	
 	file.store_string(JSON.stringify(save_data, "\t"))
 	file.close()
-	
-	# Обновляем метаданные
-	_write_meta(slot_name, save_data)
 	
 	current_slot_name = slot_name
 	
@@ -99,47 +100,15 @@ func save_game(slot_name: String) -> void:
 
 func _collect_camera_data(game_node: Node) -> Dictionary:
 	var camera_pivot = game_node.get_node_or_null("RTSCameraPivot")
-	if not camera_pivot:
-		return {"position": [0.0, 10.0, 0.0], "rotation_y": 0.0, "spring_length": 20.0}
-	
-	var pos = camera_pivot.global_position
-	var spring_arm = camera_pivot.get_node_or_null("CameraYaw/SpringArm3D")
-	var spring_length = 20.0
-	if spring_arm:
-		spring_length = spring_arm.spring_length
-	
-	var camera_yaw = camera_pivot.get_node_or_null("CameraYaw")
-	var rot_y = 0.0
-	if camera_yaw:
-		rot_y = camera_yaw.rotation.y
-	
-	return {
-		"position": [pos.x, pos.y, pos.z],
-		"rotation_y": rot_y,
-		"spring_length": spring_length,
-	}
-
-func _write_meta(slot_name: String, save_data: Dictionary) -> void:
-	var meta = {
-		"slot_name": slot_name,
-		"timestamp": save_data["timestamp"],
-		"unix_time": save_data["unix_time"],
-		"seed": save_data["seed"],
-		"game_mode": save_data["game_mode"],
-		"capital": save_data["capital"],
-		"version": SAVE_VERSION,
-	}
-	
-	var meta_path = SAVES_DIR + slot_name + "_meta.json"
-	var file = FileAccess.open(meta_path, FileAccess.WRITE)
-	if file:
-		file.store_string(JSON.stringify(meta, "\t"))
-		file.close()
+	if camera_pivot and camera_pivot.has_method("get_camera_save_data"):
+		return camera_pivot.get_camera_save_data()
+	return {}
+# Устаревшие методы _write_meta удалены, т.к. meta.dat содержит всё необходимое
 
 # ========== ЗАГРУЗКА ==========
 
 func load_game(slot_name: String) -> Dictionary:
-	var file_path = SAVES_DIR + slot_name + ".json"
+	var file_path = SAVES_DIR + slot_name + "/meta.dat"
 	
 	if not FileAccess.file_exists(file_path):
 		push_error("GameSaveSystem: Файл сохранения не найден: " + file_path)
@@ -185,19 +154,8 @@ func apply_camera_data(game_node: Node, data: Dictionary) -> void:
 		return
 	
 	var camera_pivot = game_node.get_node_or_null("RTSCameraPivot")
-	if not camera_pivot:
-		return
-	
-	var pos_arr = cam_data.get("position", [0.0, 10.0, 0.0])
-	camera_pivot.global_position = Vector3(pos_arr[0], pos_arr[1], pos_arr[2])
-	
-	var camera_yaw = camera_pivot.get_node_or_null("CameraYaw")
-	if camera_yaw:
-		camera_yaw.rotation.y = cam_data.get("rotation_y", 0.0)
-	
-	var spring_arm = camera_pivot.get_node_or_null("CameraYaw/SpringArm3D")
-	if spring_arm:
-		spring_arm.spring_length = cam_data.get("spring_length", 20.0)
+	if camera_pivot and camera_pivot.has_method("load_camera_save_data"):
+		camera_pivot.load_camera_save_data(cam_data)
 
 # ========== СПИСОК СОХРАНЕНИЙ ==========
 
@@ -209,13 +167,16 @@ func list_saves() -> Array[Dictionary]:
 		return saves
 	
 	dir.list_dir_begin()
-	var file_name = dir.get_next()
-	while file_name != "":
-		if not dir.current_is_dir() and file_name.ends_with("_meta.json"):
-			var meta = _read_meta(SAVES_DIR + file_name)
-			if not meta.is_empty():
-				saves.append(meta)
-		file_name = dir.get_next()
+	var slot_dir = dir.get_next()
+	while slot_dir != "":
+		if dir.current_is_dir() and slot_dir != "." and slot_dir != "..":
+			var meta_path = SAVES_DIR + slot_dir + "/meta.dat"
+			if FileAccess.file_exists(meta_path):
+				var meta = _read_meta(meta_path)
+				if not meta.is_empty():
+					meta["slot_name"] = slot_dir # Убедимся что имя слота совпадает с папкой
+					saves.append(meta)
+		slot_dir = dir.get_next()
 	
 	# Сортируем по дате (новые сверху)
 	saves.sort_custom(func(a, b): return a.get("unix_time", 0) > b.get("unix_time", 0))
@@ -237,18 +198,27 @@ func _read_meta(meta_path: String) -> Dictionary:
 # ========== УДАЛЕНИЕ ==========
 
 func delete_save(slot_name: String) -> void:
-	var save_path = SAVES_DIR + slot_name + ".json"
-	var meta_path = SAVES_DIR + slot_name + "_meta.json"
-	
-	if FileAccess.file_exists(save_path):
-		DirAccess.remove_absolute(save_path)
-	if FileAccess.file_exists(meta_path):
-		DirAccess.remove_absolute(meta_path)
+	var slot_dir = SAVES_DIR + slot_name
+	_remove_dir_recursive(slot_dir)
+
+func _remove_dir_recursive(path: String) -> void:
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if file_name != "." and file_name != "..":
+				if dir.current_is_dir():
+					_remove_dir_recursive(path + "/" + file_name)
+				else:
+					dir.remove(file_name)
+			file_name = dir.get_next()
+		DirAccess.remove_absolute(path)
 
 # ========== УТИЛИТЫ ==========
 
 func has_save(slot_name: String) -> bool:
-	return FileAccess.file_exists(SAVES_DIR + slot_name + ".json")
+	return FileAccess.file_exists(SAVES_DIR + slot_name + "/meta.dat")
 
 func get_effective_seed() -> int:
 	if use_random_seed:

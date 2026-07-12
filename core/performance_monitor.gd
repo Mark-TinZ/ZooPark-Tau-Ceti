@@ -64,11 +64,13 @@ func stop_session() -> void:
 func get_metrics() -> Dictionary:
 	return {
 		"fps": Engine.get_frames_per_second(),
+		"frame_time_ms": Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0,
 		"objects_in_frame": Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME),
 		"primitives_in_frame": Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),
 		"draw_calls": Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
 		"memory_static_bytes": Performance.get_monitor(Performance.MEMORY_STATIC),
 		"memory_static_mb": snapped(Performance.get_monitor(Performance.MEMORY_STATIC) / 1048576.0, 0.01),
+		"vram_mb": snapped(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0, 0.01),
 		"chunk_gen_avg_ms": snapped(chunk_gen_time_avg_usec / 1000.0, 0.01),
 		"chunk_gen_last_ms": snapped(chunk_gen_time_last_usec / 1000.0, 0.01),
 	}

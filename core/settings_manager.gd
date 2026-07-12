@@ -60,12 +60,19 @@ var settings = {
 		"bloom": true,
 		"brightness": 1.0,
 		"ssao": false,
-		"ssr": false
+		"ssr": false,
+		"render_scale": -1.0, # -1 means auto-calculate on first launch
+		"fsr_sharpness": 0.2
 	}
 }
 
 func _ready():
+	var sw = DisplayServer.screen_get_size().x
+	if settings["graphics"]["render_scale"] < 0:
+		settings["graphics"]["render_scale"] = 0.5 if sw >= 2560 else 1.0
+		
 	load_settings()
+	load_keybindings()
 
 func apply_settings():
 	if _applying:
@@ -102,11 +109,26 @@ func _apply_graphics_settings():
 	_apply_display_mode()
 	_apply_vsync()
 	_apply_fps_limit()
+	_apply_render_scale()
 	_apply_antialiasing()
 	_apply_shadow_quality()
 	
 	# Настройки, зависящие от WorldEnvironment, передаём через сигнал
 	environment_settings_changed.emit()
+
+func _apply_render_scale():
+	var viewport = get_viewport()
+	if not viewport: return
+	
+	var scale_val = settings["graphics"].get("render_scale", 1.0)
+	var sharpness = settings["graphics"].get("fsr_sharpness", 0.2)
+	
+	viewport.scaling_3d_scale = scale_val
+	if scale_val < 1.0:
+		viewport.scaling_3d_mode = Viewport.SCALING_3D_MODE_FSR2
+		viewport.fsr_sharpness = sharpness
+	else:
+		viewport.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
 
 func _apply_display_mode():
 	var mode = settings["graphics"]["display_mode"]
@@ -154,23 +176,29 @@ func _apply_antialiasing():
 	var viewport = get_viewport()
 	if not viewport:
 		return
+		
+	var scale_val = settings["graphics"].get("render_scale", 1.0)
+	var force_disable_aa = (scale_val < 1.0)
 	
 	# MSAA 3D
 	var msaa_val = settings["graphics"]["msaa"]
-	match msaa_val:
-		0: viewport.msaa_3d = Viewport.MSAA_DISABLED
-		1: viewport.msaa_3d = Viewport.MSAA_2X
-		2: viewport.msaa_3d = Viewport.MSAA_4X
-		3: viewport.msaa_3d = Viewport.MSAA_8X
+	if force_disable_aa:
+		viewport.msaa_3d = Viewport.MSAA_DISABLED
+	else:
+		match msaa_val:
+			0: viewport.msaa_3d = Viewport.MSAA_DISABLED
+			1: viewport.msaa_3d = Viewport.MSAA_2X
+			2: viewport.msaa_3d = Viewport.MSAA_4X
+			3: viewport.msaa_3d = Viewport.MSAA_8X
 	
 	# FXAA (Screen-Space AA)
-	if settings["graphics"]["fxaa"]:
+	if settings["graphics"]["fxaa"] and not force_disable_aa:
 		viewport.screen_space_aa = Viewport.SCREEN_SPACE_AA_FXAA
 	else:
 		viewport.screen_space_aa = Viewport.SCREEN_SPACE_AA_DISABLED
 	
 	# TAA
-	viewport.use_taa = settings["graphics"]["taa"]
+	viewport.use_taa = settings["graphics"]["taa"] if not force_disable_aa else false
 
 func _apply_shadow_quality():
 	# Качество теней через RenderingServer
@@ -217,12 +245,54 @@ func save_settings():
 func load_settings():
 	var err = config.load(SAVE_PATH)
 	if err == OK:
+		print("SettingsManager: Config loaded from ", SAVE_PATH)
 		for section in settings.keys():
 			if config.has_section(section):
 				for key in settings[section].keys():
 					var loaded_val = config.get_value(section, key, settings[section][key])
-					# Проверка типа: если тип загруженного значения не совпадает
-					# с типом по умолчанию, используем значение по умолчанию
+					# Проверка типа
 					if typeof(loaded_val) == typeof(settings[section][key]):
 						settings[section][key] = loaded_val
 	apply_settings()
+
+# ========== KEYBINDINGS (INPUT REMAPPING) ==========
+
+const KEYBINDINGS_PATH = "user://keybindings.cfg"
+
+func save_keybindings():
+	var local_config = ConfigFile.new()
+	for action in InputMap.get_actions():
+		if action.begins_with("ui_") and action not in ["ui_accept", "ui_cancel"]: continue
+		var events = InputMap.action_get_events(action)
+		var event_data = []
+		for e in events:
+			if e is InputEventKey:
+				event_data.append({"type": "key", "keycode": e.keycode, "physical_keycode": e.physical_keycode})
+			elif e is InputEventJoypadButton:
+				event_data.append({"type": "joy_button", "button_index": e.button_index})
+		local_config.set_value("input", action, event_data)
+	local_config.save(KEYBINDINGS_PATH)
+
+func load_keybindings():
+	var local_config = ConfigFile.new()
+	var err = local_config.load(KEYBINDINGS_PATH)
+	if err != OK: return
+	
+	if local_config.has_section("input"):
+		for action in local_config.get_section_keys("input"):
+			if not InputMap.has_action(action):
+				InputMap.add_action(action)
+			
+			var event_data = local_config.get_value("input", action, [])
+			if event_data.size() > 0:
+				InputMap.action_erase_events(action)
+				for edata in event_data:
+					if edata["type"] == "key":
+						var ev = InputEventKey.new()
+						ev.keycode = edata.get("keycode", 0)
+						ev.physical_keycode = edata.get("physical_keycode", 0)
+						InputMap.action_add_event(action, ev)
+					elif edata["type"] == "joy_button":
+						var ev = InputEventJoypadButton.new()
+						ev.button_index = edata.get("button_index", 0)
+						InputMap.action_add_event(action, ev)
