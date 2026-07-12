@@ -57,6 +57,13 @@ func _ready() -> void:
 		
 	# Принудительная первая генерация вокруг стартовой точки
 	_update_chunks(Vector2.ZERO)
+	
+	# Подписываемся на изменение настроек графики для обновления теней
+	if SettingsManager.environment_settings_changed.get_connections().is_empty():
+		SettingsManager.environment_settings_changed.connect(_on_environment_settings_changed)
+	else:
+		if not SettingsManager.environment_settings_changed.is_connected(_on_environment_settings_changed):
+			SettingsManager.environment_settings_changed.connect(_on_environment_settings_changed)
 
 func _process(_delta: float) -> void:
 	# 1. Определение фокуса камеры и обновление сетки чанков
@@ -187,6 +194,10 @@ func _instantiate_chunk(data: ChunkData) -> void:
 	# Передача данных вызовет безопасную пересборку ArrayMesh и коллизии внутри класса Chunk
 	chunk.set_data(data, terrain_material)
 	active_chunks[data.chunk_pos] = chunk
+	
+	# Применяем текущие настройки теней к новому чанку
+	var shadow_quality = SettingsManager.settings["graphics"]["shadow_quality"]
+	chunk.set_shadows_enabled(shadow_quality > 1)
 
 # ========== ЗАПРОС ВЫСОТЫ ЛАНДШАФТА (для камеры) ==========
 
@@ -197,7 +208,8 @@ func get_height_at_pos(world_x: float, world_z: float) -> float:
 
 # ========== ВЗАИМОДЕЙСТВИЕ СО ЗДАНИЯМИ ==========
 
-func add_building_to_chunk(global_pos: Vector3, building_type: String) -> void:
+func add_building_to_chunk(transform: Transform3D, building_type: String, enclosure_data: Enclosure = null) -> void:
+	var global_pos = transform.origin
 	var c_x = floor(global_pos.x / (chunk_size * vertex_spacing))
 	var c_z = floor(global_pos.z / (chunk_size * vertex_spacing))
 	var pos2d = Vector2(c_x, c_z)
@@ -205,7 +217,7 @@ func add_building_to_chunk(global_pos: Vector3, building_type: String) -> void:
 	if active_chunks.has(pos2d):
 		var chunk = active_chunks[pos2d]
 		if chunk.chunk_data:
-			chunk.chunk_data.add_building_delta(building_type, global_pos)
+			chunk.chunk_data.add_building_delta(building_type, transform)
 			
 			# Сразу спавним в мире, чтобы игрок видел
 			var b_scene = load("res://features/buildings/building_basic.tscn")
@@ -213,4 +225,18 @@ func add_building_to_chunk(global_pos: Vector3, building_type: String) -> void:
 				var b = b_scene.instantiate() as Node3D
 				chunk.add_child(b)
 				b.add_to_group("buildings")
-				b.global_position = global_pos
+				b.global_transform = transform
+				
+				# Если передан Enclosure, привязываем его к скрипту building_node
+				if enclosure_data and "enclosure_data" in b:
+					b.enclosure_data = enclosure_data
+
+func _on_environment_settings_changed() -> void:
+	# 0=Off, 1=Low, 2=Medium, 3=High, 4=Ultra
+	# Отключаем тени деревьев на Low и Medium
+	var shadow_quality = SettingsManager.settings["graphics"]["shadow_quality"]
+	var shadows_enabled = shadow_quality > 1
+	
+	for chunk in active_chunks.values():
+		if is_instance_valid(chunk):
+			chunk.set_shadows_enabled(shadows_enabled)

@@ -7,7 +7,8 @@ extends StaticBody3D
 var chunk_pos: Vector2
 var is_active: bool = false
 var chunk_data: ChunkData
-var multimesh_instance: MultiMeshInstance3D
+var trees_3d_multimesh: MultiMeshInstance3D
+var trees_2d_multimesh: MultiMeshInstance3D
 
 # Custom material, normally passed from a global resource or world generator
 var terrain_material: StandardMaterial3D
@@ -17,8 +18,19 @@ func _ready() -> void:
 	if not mesh_instance.mesh:
 		mesh_instance.mesh = ArrayMesh.new()
 		
-	multimesh_instance = MultiMeshInstance3D.new()
-	add_child(multimesh_instance)
+	trees_3d_multimesh = MultiMeshInstance3D.new()
+	trees_3d_multimesh.visibility_range_end = 60.0
+	trees_3d_multimesh.visibility_range_end_margin = 10.0
+	trees_3d_multimesh.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF
+	add_child(trees_3d_multimesh)
+	
+	trees_2d_multimesh = MultiMeshInstance3D.new()
+	trees_2d_multimesh.visibility_range_begin = 60.0
+	trees_2d_multimesh.visibility_range_begin_margin = 10.0
+	trees_2d_multimesh.visibility_range_end = 150.0
+	trees_2d_multimesh.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF
+	trees_2d_multimesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(trees_2d_multimesh)
 
 func set_data(data: ChunkData, material: Material = null) -> void:
 	chunk_pos = data.chunk_pos
@@ -49,32 +61,61 @@ func set_data(data: ChunkData, material: Material = null) -> void:
 				var b = b_scene.instantiate() as Node3D
 				add_child(b)
 				b.add_to_group("buildings")
-				var p = b_data["pos"]
-				b.global_position = Vector3(p[0], p[1], p[2])
+				if b_data.has("transform"):
+					b.global_transform = b_data["transform"]
+				elif b_data.has("pos"):
+					var p = b_data["pos"]
+					b.global_position = Vector3(p[0], p[1], p[2])
 				
-	# 5. Set up MultiMesh for trees
+	# 5. Set up MultiMesh for trees (3D and 2D impostors)
 	var tree_count = data.tree_matrices.size() / 12
 	if tree_count > 0:
-		var mm = MultiMesh.new()
-		mm.transform_format = MultiMesh.TRANSFORM_3D
-		mm.instance_count = tree_count
-		mm.buffer = data.tree_matrices
+		# --- 3D Trees ---
+		var mm_3d = MultiMesh.new()
+		mm_3d.transform_format = MultiMesh.TRANSFORM_3D
+		mm_3d.instance_count = tree_count
+		mm_3d.buffer = data.tree_matrices
 		
 		var tree_mesh = CylinderMesh.new()
 		tree_mesh.top_radius = 0.0
 		tree_mesh.bottom_radius = 0.5
 		tree_mesh.height = 4.0
+		tree_mesh.radial_segments = 6 # В 10 раз меньше полигонов!
+		tree_mesh.rings = 1
 		var mat = StandardMaterial3D.new()
 		mat.albedo_color = Color(0.1, 0.5, 0.1)
 		tree_mesh.material = mat
 		
-		mm.mesh = tree_mesh
-		multimesh_instance.multimesh = mm
-		multimesh_instance.show()
+		mm_3d.mesh = tree_mesh
+		trees_3d_multimesh.multimesh = mm_3d
+		trees_3d_multimesh.show()
+		
+		# --- 2D Impostors ---
+		var mm_2d = MultiMesh.new()
+		mm_2d.transform_format = MultiMesh.TRANSFORM_3D
+		mm_2d.instance_count = tree_count
+		mm_2d.buffer = data.tree_matrices
+		
+		var quad = QuadMesh.new()
+		quad.size = Vector2(2, 4)
+		var mat_2d = StandardMaterial3D.new()
+		mat_2d.albedo_color = Color(0.1, 0.5, 0.1)
+		mat_2d.billboard_mode = BaseMaterial3D.BILLBOARD_FIXED_Y
+		mat_2d.billboard_keep_scale = true
+		mat_2d.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+		mat_2d.alpha_scissor_threshold = 0.5
+		quad.material = mat_2d
+		
+		mm_2d.mesh = quad
+		trees_2d_multimesh.multimesh = mm_2d
+		trees_2d_multimesh.show()
 	else:
-		if multimesh_instance.multimesh:
-			multimesh_instance.multimesh.instance_count = 0
-		multimesh_instance.hide()
+		if trees_3d_multimesh.multimesh:
+			trees_3d_multimesh.multimesh.instance_count = 0
+		if trees_2d_multimesh.multimesh:
+			trees_2d_multimesh.multimesh.instance_count = 0
+		trees_3d_multimesh.hide()
+		trees_2d_multimesh.hide()
 	
 	_enable()
 
@@ -89,3 +130,7 @@ func _enable() -> void:
 	visible = true
 	collision_shape.disabled = false
 	is_active = true
+
+func set_shadows_enabled(enabled: bool) -> void:
+	if trees_3d_multimesh:
+		trees_3d_multimesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if enabled else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

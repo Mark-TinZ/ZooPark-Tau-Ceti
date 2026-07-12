@@ -17,11 +17,11 @@ func mark_dirty() -> void:
 	is_dirty = true
 	mutex.unlock()
 
-func add_building_delta(building_type: String, local_pos: Vector3) -> void:
+func add_building_delta(building_type: String, transform: Transform3D) -> void:
 	mutex.lock()
 	if not delta_data.has("buildings"):
 		delta_data["buildings"] = []
-	delta_data["buildings"].append({"type": building_type, "pos": [local_pos.x, local_pos.y, local_pos.z]})
+	delta_data["buildings"].append({"type": building_type, "transform": transform})
 	is_dirty = true
 	mutex.unlock()
 
