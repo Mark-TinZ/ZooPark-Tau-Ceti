@@ -29,6 +29,14 @@ var frame_time_label: Label
 var vram_label: Label
 var display_label: Label
 var copy_btn: Button
+var cpu_label: Label
+var gpu_label: Label
+var chunks_status_label: Label
+var entities_label: Label
+var rendered_label: Label
+var culled_label: Label
+var microfreeze_graph: Control
+var _frame_history: Array[float] = []
 
 # Цвета индикации
 const COLOR_GOOD = Color(0, 1, 0.5)      # Зелёный
@@ -60,6 +68,50 @@ func _ready() -> void:
 	var sep = HSeparator.new()
 	vbox.add_child(sep)
 	
+	cpu_label = Label.new()
+	cpu_label.add_theme_font_size_override("font_size", 13)
+	vbox.add_child(cpu_label)
+	
+	gpu_label = Label.new()
+	gpu_label.add_theme_font_size_override("font_size", 13)
+	vbox.add_child(gpu_label)
+	
+	var sep_custom = HSeparator.new()
+	vbox.add_child(sep_custom)
+	
+	chunks_status_label = Label.new()
+	chunks_status_label.add_theme_font_size_override("font_size", 13)
+	vbox.add_child(chunks_status_label)
+	
+	entities_label = Label.new()
+	entities_label.add_theme_font_size_override("font_size", 13)
+	vbox.add_child(entities_label)
+	
+	rendered_label = Label.new()
+	rendered_label.add_theme_font_size_override("font_size", 13)
+	vbox.add_child(rendered_label)
+	
+	culled_label = Label.new()
+	culled_label.add_theme_font_size_override("font_size", 13)
+	vbox.add_child(culled_label)
+	
+	var sep_custom2 = HSeparator.new()
+	vbox.add_child(sep_custom2)
+	
+	var graph_title = Label.new()
+	graph_title.text = "график микрофризов"
+	graph_title.add_theme_font_size_override("font_size", 11)
+	graph_title.add_theme_color_override("font_color", COLOR_DEFAULT)
+	vbox.add_child(graph_title)
+	
+	microfreeze_graph = Control.new()
+	microfreeze_graph.custom_minimum_size = Vector2(0, 50)
+	microfreeze_graph.draw.connect(_on_graph_draw)
+	vbox.add_child(microfreeze_graph)
+	
+	var sep_end = HSeparator.new()
+	vbox.add_child(sep_end)
+	
 	display_label = Label.new()
 	display_label.add_theme_font_size_override("font_size", 13)
 	display_label.add_theme_color_override("font_color", COLOR_DEFAULT)
@@ -88,11 +140,35 @@ func _process(_delta: float) -> void:
 	elif vsync_mode == DisplayServer.VSYNC_ADAPTIVE: vsync_str = "Адаптив"
 	elif vsync_mode == DisplayServer.VSYNC_MAILBOX: vsync_str = "Mailbox"
 	display_label.text = "Экран: %dx%d | V-Sync: %s" % [vp_size.x, vp_size.y, vsync_str]
+	
+	# Custom items
+	var cpu_ms = metrics.get("frame_time_ms", 0.0)
+	_frame_history.append(cpu_ms)
+	if _frame_history.size() > 120:
+		_frame_history.pop_front()
+	if microfreeze_graph:
+		microfreeze_graph.queue_redraw()
+		
+	cpu_label.text = "cpu %.1f ms" % cpu_ms
+	gpu_label.text = "gpu 0.0 ms"
+	
+	var active_count = _generator.active_chunks.size() if _generator else 0
+	var queued_count = _generator.chunks_to_generate.size() if _generator and "chunks_to_generate" in _generator else 0
+	chunks_status_label.text = "chunks %d (+%d queued)" % [active_count, queued_count]
+	
+	var ents = Performance.get_monitor(Performance.OBJECT_NODE_COUNT)
+	entities_label.text = "entities %d" % ents
+	
+	var rend = int(metrics.get("objects_in_frame", 0))
+	rendered_label.text = "rendered %d" % rend
+	
+	var culled = 0
+	culled_label.text = "culled %d" % culled
 
 func _update_render_section(metrics: Dictionary) -> void:
 	# FPS
-	var fps = int(metrics.get("fps", 0))
-	fps_label.text = "FPS: %d" % fps
+	var fps = float(metrics.get("fps", 0))
+	fps_label.text = "fps %.1f" % fps
 	if fps >= 60:
 		fps_label.add_theme_color_override("font_color", COLOR_GOOD)
 	elif fps >= 30:
@@ -249,3 +325,41 @@ Chunk Gen Time: %.2f ms
 	
 	var t = get_tree().create_timer(1.5)
 	t.timeout.connect(func(): if is_instance_valid(copy_btn): copy_btn.text = "Скопировать отчет")
+
+func _on_graph_draw() -> void:
+	if _frame_history.is_empty():
+		return
+		
+	var w = microfreeze_graph.size.x
+	var h = microfreeze_graph.size.y
+	var max_hist = 120
+	var max_val = 33.3 # 30fps threshold
+	var step = w / float(max_hist)
+	
+	# Background
+	microfreeze_graph.draw_rect(Rect2(0, 0, w, h), Color(0, 0, 0, 0.4))
+	
+	# 60fps line (16.6ms)
+	var line_60 = h - (16.6 / max_val) * h
+	if line_60 > 0 and line_60 < h:
+		microfreeze_graph.draw_line(Vector2(0, line_60), Vector2(w, line_60), Color(0, 1, 0, 0.3), 1.0)
+		
+	var pts = PackedVector2Array()
+	pts.append(Vector2(0, h))
+	for i in range(_frame_history.size()):
+		var val = minf(_frame_history[i], max_val)
+		var x = i * step
+		var y = h - (val / max_val) * h
+		pts.append(Vector2(x, y))
+	pts.append(Vector2(maxf(0, (_frame_history.size() - 1) * step), h))
+	
+	if pts.size() >= 3:
+		microfreeze_graph.draw_colored_polygon(pts, Color(1, 0.6, 0, 0.8))
+	
+	# Spikes highlight
+	for i in range(_frame_history.size()):
+		if _frame_history[i] > 16.6:
+			var val = minf(_frame_history[i], max_val)
+			var x = i * step
+			var y = h - (val / max_val) * h
+			microfreeze_graph.draw_line(Vector2(x, h), Vector2(x, y), Color(1, 0, 0, 0.9), 1.0)
