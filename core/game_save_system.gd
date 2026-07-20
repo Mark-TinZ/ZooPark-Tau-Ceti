@@ -63,6 +63,11 @@ func save_game(slot_name: String) -> void:
 		save_completed.emit(false, slot_name)
 		return
 		
+	# Форсируем сохранение активных чанков в ChunkManager перед записью меты
+	var world_gen: Node = game_node.get_node_or_null("WorldGenerator")
+	if world_gen and world_gen.has_method("force_save_all_active_chunks"):
+		world_gen.force_save_all_active_chunks()
+		
 	var save_data = {
 		"version": SAVE_VERSION,
 		"timestamp": Time.get_datetime_string_from_system(),

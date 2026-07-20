@@ -5,3 +5,4 @@ size = Vector3(2, 2, 2)
 
 [node name="BuildingHologram" type="MeshInstance3D"]
 mesh = SubResource("BoxMesh_v5p2m")
+lod_bias = 1.0

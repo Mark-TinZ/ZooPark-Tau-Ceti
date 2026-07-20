@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://df5m3qwx43u8p"]
+
+[ext_resource type="Script" path="res://features/ai/boids/boid.gd" id="1_boid"]
+[ext_resource type="PackedScene" uid="uid://x2y3z4w5a6b7" path="res://features/ui/world_ui/entity_3d_widget.tscn" id="2_widget"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_boid"]
+albedo_color = Color(0.2, 0.6, 1.0, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_boid"]
+material = SubResource("StandardMaterial3D_boid")
+top_radius = 0.0
+bottom_radius = 0.3
+height = 1.0
+
+[node name="Boid" type="Node3D"]
+script = ExtResource("1_boid")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_boid")
+
+[node name="Entity3DWidget" parent="." instance=ExtResource("2_widget")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)

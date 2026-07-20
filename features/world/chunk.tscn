@@ -8,5 +8,11 @@ collision_mask = 1
 script = ExtResource("1_chunk")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+lod_bias = 1.0
+visibility_range_end = 150.0
+visibility_range_end_margin = 15.0
+gi_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+
+[node name="OccluderInstance3D" type="OccluderInstance3D" parent="."]

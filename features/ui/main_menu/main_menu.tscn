@@ -4,6 +4,7 @@
 [ext_resource type="AudioStream" uid="uid://xunu5vlm6wjq" path="res://assets/audio/music/Lost in space.wav" id="1_fsom3"]
 [ext_resource type="PackedScene" path="res://features/ui/main_menu/world_creation_menu.tscn" id="2_world"]
 [ext_resource type="PackedScene" path="res://features/ui/main_menu/lan_browser.tscn" id="3_lan"]
+[ext_resource type="Theme" uid="uid://cotgjg3xpr4gp" path="res://features/ui/main_theme.tres" id="4_theme"]
 
 [sub_resource type="Gradient" id="Gradient_ob46e"]
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
@@ -33,43 +34,11 @@ scale_curve = SubResource("CurveTexture_3ovsr")
 color_ramp = SubResource("GradientTexture1D_uqeha")
 collision_mode = 2
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sl1te"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fe2o3"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1g8jr"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m1kxf"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x2yvf"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-expand_margin_left = 4.0
-expand_margin_top = 4.0
-expand_margin_right = 4.0
-expand_margin_bottom = 4.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uhagc"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_btxxm"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wb0q5"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q85j6"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8g5eo"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7suek"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_otr3d"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ekit"]
 
 [node name="Control" type="Control" unique_id=622155523]
 layout_mode = 3
+theme = ExtResource("4_theme")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -106,11 +75,6 @@ layout_mode = 2
 focus_neighbor_top = NodePath("../MainMenuButtonExit")
 focus_neighbor_bottom = NodePath("../MainMenuButtonSettings")
 focus_mode = 1
-theme_override_styles/normal = SubResource("StyleBoxEmpty_sl1te")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_fe2o3")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_1g8jr")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_m1kxf")
-theme_override_styles/focus = SubResource("StyleBoxFlat_x2yvf")
 text = "KEY_START"
 
 [node name="MainMenuButtonSettings" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1814310726]
@@ -118,11 +82,6 @@ layout_mode = 2
 focus_neighbor_top = NodePath("../MainMenuButtonStart")
 focus_neighbor_bottom = NodePath("../MainMenuButtonExit")
 focus_mode = 1
-theme_override_styles/normal = SubResource("StyleBoxEmpty_uhagc")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_btxxm")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_wb0q5")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_q85j6")
-theme_override_styles/focus = SubResource("StyleBoxFlat_x2yvf")
 text = "KEY_SETTINGS"
 
 [node name="MainMenuButtonExit" type="Button" parent="MarginContainer/VBoxContainer" unique_id=511899632]
@@ -130,11 +89,6 @@ layout_mode = 2
 focus_neighbor_top = NodePath("../MainMenuButtonSettings")
 focus_neighbor_bottom = NodePath("../MainMenuButtonStart")
 focus_mode = 1
-theme_override_styles/normal = SubResource("StyleBoxEmpty_8g5eo")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_7suek")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_otr3d")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_8ekit")
-theme_override_styles/focus = SubResource("StyleBoxFlat_x2yvf")
 text = "KEY_EXIT"
 
 
@@ -156,7 +110,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="PlayPanel/CenterContainer" unique_id=987654323]
-custom_minimum_size = Vector2(800, 600)
 layout_mode = 2
 mouse_filter = 2
 

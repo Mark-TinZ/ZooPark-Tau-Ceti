@@ -1,9 +1,11 @@
 [gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://features/ui/pause_menu/pause_menu.gd" id="1_pause"]
+[ext_resource type="Theme" uid="uid://cotgjg3xpr4gp" path="res://features/ui/main_theme.tres" id="2_theme"]
 
 [node name="PauseMenu" type="Control"]
 process_mode = 4
+theme = ExtResource("2_theme")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -58,14 +60,14 @@ layout_mode = 2
 
 [node name="ResumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/ButtonsContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
+size_flags_vertical = 3
 text = "KEY_RESUME"
 
 [node name="SettingsButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/ButtonsContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
+size_flags_vertical = 3
 text = "KEY_SETTINGS"
 
 [node name="HSeparator2" type="HSeparator" parent="CenterContainer/PanelContainer/MarginContainer/ButtonsContainer"]
@@ -73,6 +75,6 @@ layout_mode = 2
 
 [node name="MainMenuButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/ButtonsContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
+size_flags_vertical = 3
 text = "KEY_MAIN_MENU"

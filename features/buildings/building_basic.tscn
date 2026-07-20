@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://building_basic_1"]
+[gd_scene load_steps=6 format=3 uid="uid://building_basic_1"]
 
 [ext_resource type="Script" path="res://features/buildings/building_node.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://x2y3z4w5a6b7" path="res://features/ui/world_ui/entity_3d_widget.tscn" id="2_widget"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_building"]
 albedo_color = Color(0.6, 0.6, 0.6, 1)
@@ -8,13 +9,24 @@ albedo_color = Color(0.6, 0.6, 0.6, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_building"]
 material = SubResource("StandardMaterial3D_building")
 size = Vector3(2, 2, 2)
+add_uv2 = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxOccluder3D" id="BoxOccluder3D_basic"]
 size = Vector3(2, 2, 2)
 
 [node name="BuildingBasic" type="MeshInstance3D"]
 mesh = SubResource("BoxMesh_building")
 script = ExtResource("1_script")
+lod_bias = 1.0
+visibility_range_end = 100.0
+visibility_range_end_margin = 10.0
+gi_mode = 1
+
+[node name="OccluderInstance3D" type="OccluderInstance3D" parent="."]
+occluder = SubResource("BoxOccluder3D_basic")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 collision_layer = 8
@@ -22,3 +34,6 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_1")
+
+[node name="Entity3DWidget" parent="." instance=ExtResource("2_widget")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)

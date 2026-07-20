@@ -81,7 +81,8 @@ func _process(_delta: float) -> void:
 		# Определение наклона
 		var slope_angle = rad_to_deg(acos(surf_normal.dot(Vector3.UP)))
 		
-		is_valid_placement = slope_angle <= max_slope_degrees
+		# Allow placement anywhere since we will auto-level the terrain
+		is_valid_placement = true
 		
 		if is_valid_placement:
 			hologram.material_override = mat_valid
@@ -108,6 +109,10 @@ func _unhandled_input(event: InputEvent) -> void:
 				
 				var world_gen = get_tree().current_scene.get_node_or_null("WorldGenerator")
 				if world_gen and world_gen.has_method("add_building_to_chunk"):
+					if world_gen.has_method("apply_terraform"):
+						var radius = current_item_data.get("size", 2.0) * grid_size
+						world_gen.apply_terraform(hologram.global_position, radius, hologram.global_position.y - 1.0)
+						
 					var enclosure = Enclosure.new()
 					enclosure.climate = current_item_data.get("climate", 0)
 					EconomyManager.enclosures.append(enclosure)

@@ -45,7 +45,7 @@ func queue_chunk_for_save(chunk_data: ChunkData) -> void:
 	chunk_data.mutex.lock()
 	if chunk_data.is_dirty:
 		# Извлекаем копию данных и сбрасываем флаг, пока мы в мьютексе чанка
-		var copy = ChunkData.new()
+		var copy := ChunkData.new()
 		copy.chunk_pos = chunk_data.chunk_pos
 		copy.delta_data = chunk_data.delta_data.duplicate(true)
 		chunk_data.is_dirty = false
@@ -66,10 +66,10 @@ func load_chunk_data(pos: Vector2) -> ChunkData:
 	if current_slot_name == "":
 		return null
 		
-	var file_path = (CHUNKS_DIR % current_slot_name) + "chunk_%d_%d.res" % [int(pos.x), int(pos.y)]
+	var file_path := (CHUNKS_DIR % current_slot_name) + "chunk_%d_%d.res" % [int(pos.x), int(pos.y)]
 	if FileAccess.file_exists(file_path):
 		# Пытаемся загрузить бинарный файл
-		var res = ResourceLoader.load(file_path, "Resource") as ChunkData
+		var res := ResourceLoader.load(file_path, "Resource") as ChunkData
 		if res:
 			res.chunk_pos = pos
 			return res
@@ -83,22 +83,22 @@ func _thread_func() -> void:
 			
 		# Безопасно забираем очередь
 		_mutex.lock()
-		var queue_copy = _dirty_queue.duplicate()
+		var queue_copy := _dirty_queue.duplicate()
 		_dirty_queue.clear()
 		_mutex.unlock()
 		
 		if queue_copy.size() == 0 or current_slot_name == "":
 			continue
 			
-		var dir_path = CHUNKS_DIR % current_slot_name
+		var dir_path := CHUNKS_DIR % current_slot_name
 		for chunk in queue_copy:
-			var file_path = dir_path + "chunk_%d_%d.res" % [int(chunk.chunk_pos.x), int(chunk.chunk_pos.y)]
+			var file_path := dir_path + "chunk_%d_%d.res" % [int(chunk.chunk_pos.x), int(chunk.chunk_pos.y)]
 			
 			# Мы сохраняем ТОЛЬКО delta_data, никаких мешей и коллизий
-			var res_to_save = ChunkData.new()
+			var res_to_save := ChunkData.new()
 			res_to_save.delta_data = chunk.delta_data
 			
-			var err = ResourceSaver.save(res_to_save, file_path, ResourceSaver.FLAG_COMPRESS)
+			var err := ResourceSaver.save(res_to_save, file_path, ResourceSaver.FLAG_COMPRESS)
 			if err != OK:
 				push_error("ChunkManager: Ошибка сохранения чанка %s" % file_path)
 

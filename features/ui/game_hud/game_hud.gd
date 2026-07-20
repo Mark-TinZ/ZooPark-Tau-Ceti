@@ -12,9 +12,9 @@ extends CanvasLayer
 @onready var btn_shop: Button = %BtnShop
 @onready var btn_close_shop: Button = %BtnCloseShop
 
-@onready var shop_panel: PanelContainer = $HUDContainer/ShopPanel
+@onready var shop_panel: CenterContainer = $HUDContainer/ShopCenterContainer
 @onready var shop_items_grid: GridContainer = %ShopItemsGrid
-@onready var shop_title: Label = $HUDContainer/ShopPanel/MarginContainer/VBoxContainer/HeaderBox/Title
+@onready var shop_title: Label = $HUDContainer/ShopCenterContainer/ShopPanel/MarginContainer/VBoxContainer/HeaderBox/Title
 
 @onready var enclosure_label: Label = %EnclosureLabel
 
@@ -39,6 +39,7 @@ func _ready() -> void:
 	
 	btn_shop.pressed.connect(_on_btn_shop_pressed)
 	btn_close_shop.pressed.connect(_on_btn_close_shop_pressed)
+	btn_enclosures.pressed.connect(_on_btn_enclosures_pressed)
 	EconomyManager.active_enclosure_changed.connect(_on_active_enclosure_changed)
 	
 	_populate_shop()
@@ -85,9 +86,9 @@ func _on_item_buy_requested(item_type: String, item_data: Dictionary) -> void:
 			
 	elif item_type == "enclosure":
 		print("Select placement for enclosure...")
-		var placement = get_tree().current_scene.get_node_or_null("PlacementSystem")
+		var placement = get_tree().current_scene.get_node_or_null("BuildingPlacementManager")
 		if placement and placement.has_method("start_placement"):
-			placement.start_placement(item_type, item_data)
+			placement.start_placement("res://features/buildings/building_basic.tscn", item_data)
 			shop_panel.hide()
 
 func _on_money_changed(new_amount: int) -> void:
@@ -102,9 +103,14 @@ func _on_staff_changed(total_count: int) -> void:
 func _on_btn_shop_pressed() -> void:
 	shop_panel.visible = !shop_panel.visible
 	if shop_panel.visible:
-		var placement = get_tree().current_scene.get_node_or_null("PlacementSystem")
+		var placement = get_tree().current_scene.get_node_or_null("BuildingPlacementManager")
 		if placement and placement.has_method("cancel_placement"):
 			placement.cancel_placement()
 
 func _on_btn_close_shop_pressed() -> void:
 	shop_panel.visible = false
+
+func _on_btn_enclosures_pressed() -> void:
+	var placement = get_tree().current_scene.get_node_or_null("BuildingPlacementManager")
+	if placement and placement.has_method("start_placement"):
+		placement.start_placement("res://features/buildings/building_basic.tscn", {"price": 1000})
